@@ -1,0 +1,20 @@
+.header {
+  font-size: 35px;
+  font-weight: bold;
+  text-align: center;
+  margin: 20px;
+}
+
+.view {
+  text-align: center;
+}
+
+.left-link,
+.right-link {
+  text-decoration: none;
+  color: black;
+}
+
+.left-link {
+  margin-right: 60px;
+}

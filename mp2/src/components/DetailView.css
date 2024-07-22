@@ -1,0 +1,33 @@
+.card {
+    width: 700px;
+    height: 400px;
+    box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.5);
+    margin-top: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    display: grid;
+    grid-template-columns: 300px 350px;
+    column-gap: 30px;
+    align-items: center;
+}
+
+.card-image {
+    width: 300px;
+    height: 400px;
+    object-fit: cover;
+}
+
+.card-button-area {
+    display: flex;
+    justify-content: space-between;
+}
+
+.card-button {
+    color: white;
+    background-color: gray;
+    border: none;
+    cursor: pointer;
+}
+
+
+

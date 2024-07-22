@@ -1,0 +1,50 @@
+.search-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    margin-top: 20px;
+
+}
+
+.search {
+
+}
+
+.sort-by {
+
+}
+
+.order {
+
+}
+
+
+
+
+.movie-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    column-gap: 20px;
+    row-gap: 20px;
+    margin-top: 20px;
+}
+
+.movie-item {
+    box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.5);
+    text-align: center;
+}
+
+.movie-image {
+    width: 100%;
+    /* height: 90%; */
+    object-fit: cover;
+    margin-bottom: 10px;
+}
+
+.movie-title {
+    margin-bottom: 10px;
+}
+
+.movie-rating {
+    
+}
+
