@@ -55,7 +55,7 @@ const Greeting = () => {
 
 - starts with capital letter
 - must return JSX (html)
-- always close tag <Greeting />
+- always close tag <Greeting/>
 
 ##### Typical Component
 
