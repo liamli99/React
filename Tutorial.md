@@ -4,29 +4,33 @@
 - [React Developer Tools](https://chromewebstore.google.com/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi?utm_source=ext_app_menu)
 
 ## Create React applications
-1. Create React App
+### Create React App
 - [Documentation](https://create-react-app.dev/docs/getting-started)
-- `npx create-react-app my-app` -> `npm start`
-- We only need to keep `public/index.html` (page template) and `src/index.js` (entry point)!
+- `npx create-react-app my-app` -> `cd my-app` -> `npm start`
+- We should at least keep `public/index.html` (page template) and `src/index.js` (entry point)!
 
 
-1. Vite (Recommended!)
+### Vite (Recommended!)
+- [Documentation](https://vitejs.dev/guide/)
+- `npm create vite@latest my-app -- --template react` -> `cd my-app` -> `npm install` -> `npm run dev`
+- We should at least keep `index.html` (page template) and `src/main.jsx` (entry point)!
+- Must use `.jsx` extension
 
 ## Theories
 ### Trigger, Render, and Commit
 Any screen update in a React app happens in three steps:
 1. Trigger a render
    There are 2 reasons for a component to render:
-   1. It's the component's **initial render**: When the app starts, we need to triger the initial render!
-   2. The component's **state has been updated**: Once the component has been initially rendered, we can trigger re-renders by updating its state (set function provided by useState)!
+   1. When the app starts, we need to triger the **initial render**!
+   2. Once the component has been initially rendered, we can trigger **re-renders** by updating its state (set function provided by useState)!
 
 2. Render the component
    Once we trigger a render, React renders (calls) the components to figure out what to display on screen. Rendering must be pure!
-   1. For the initial render: Reacr will call the root component
+   1. For the initial render: React will call the root component
    2. For the re-renders: React will call the component whose state update triggered the render.
 
 3. Commit to the DOM
-   After rendering (calling) your components, React will modify the DOM. React only changes the DOM if there’s a difference between renders!
+   After rendering (calling) your components, React will modify the DOM tree. React only changes the DOM if there’s a difference between renders!
    1. For the initial render: React will use the `appendChild()` DOM API to put all the DOM nodes it has created on screen.
    2. For the re-renders: React will apply the minimal necessary operations (calculated while rendering!) to make the DOM match the latest rendering output.
 
@@ -39,7 +43,7 @@ Any screen update in a React app happens in three steps:
 - You can nest a component inside another component, but never define a component inside another component! Please define every component at the top level! When a child component needs some data from a parent, pass it by props instead of nesting definitions.
 - React application begins at a **root** component file, e.g. `App.js`
 - For many years, web developers kept content in HTML, design in CSS, and logic in JavaScript — often in separate files! However in React, **rendering logic and markup live together in the components** because they are related!
-- Components must be **pure** functions: (1) They should not change any variables that existed before rendering (outside the component)! (2) Given the same input, they should always return the same output! React offers a **Strict Mode** in which it calls each component’s function twice during development (doesn't affect production) to help find components that break these rules! Note that if we use `npx creat-react-app`, root component is wrapped into `<React.StrictMode></React.StrictMode>` by default!
+- Components must be **pure** functions: (1) They should not change any variables that existed before rendering (outside the component)! (2) Given the same input, they should always return the same output! React offers a **Strict Mode** in which it calls each component’s function twice during development (doesn't affect production) to help find components that break these rules! Note that if we use 'Create React App' or 'Vite', root component App is wrapped into `<React.StrictMode></React.StrictMode>` by default!
 
 ### Component Example
 ```js
@@ -182,7 +186,7 @@ const itemList = items.map(item =>
 );
 
 return (
-    {/* 'itemList' is an array! We can put an array inside curly braces! */}
+    {/* 'itemList' is an array! We can put an array inside curly braces to render elements in order! */}
     <ul>{itemList}</ul>
 );
 ```
