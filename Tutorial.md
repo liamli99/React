@@ -6,11 +6,11 @@
 ## Create React applications
 1. Create React App
 - [Documentation](https://create-react-app.dev/docs/getting-started)
-- `npx create-react-app my-app`
+- `npx create-react-app my-app` -> `npm start`
 - We only need to keep `public/index.html` (page template) and `src/index.js` (entry point)!
 
 
-2. Vite (Recommended!)
+1. Vite (Recommended!)
 
 ## Theories
 ### Trigger, Render, and Commit
@@ -33,13 +33,13 @@ Any screen update in a React app happens in three steps:
 
 ## Component
 - React apps are made out of **componens**. A component is a piece of the **reusable UI** (user interface) that has its own logic and appearance. A component can be as small as a button, or as large as an entire page.
-- Components are **JavaScript functions** that return **HTML-like markup**. If the markup only has one line, then we can directly return it; However, if the markup has multiple lines, we should wrap it in a pair of parentheses! 
+- Components are **JavaScript functions** that return **HTML-like markup**. If the markup only has one line, then we can directly return it (we can further remove the curly braces and return because of arrow function shortcut!); However, if the markup has multiple lines, we should wrap it in a pair of parentheses! 
 - Just like with HTML tags, you can **compose, order and nest** components to design whole pages. 
 - Component names must start with a capital letter and use **PascalCase**.
 - You can nest a component inside another component, but never define a component inside another component! Please define every component at the top level! When a child component needs some data from a parent, pass it by props instead of nesting definitions.
 - React application begins at a **root** component file, e.g. `App.js`
 - For many years, web developers kept content in HTML, design in CSS, and logic in JavaScript — often in separate files! However in React, **rendering logic and markup live together in the components** because they are related!
-- Components must be **pure** functions: (1) They should not change any variables that existed before rendering (outside the component)! (2) Given the same input, they should always return the same output! React offers a **Strict Mode** in which it calls each component’s function twice during development to help find components that break these rules! Note that if we use `npx creat-react-app`, root component is wrapped into `<React.StrictMode></React.StrictMode>` by default!
+- Components must be **pure** functions: (1) They should not change any variables that existed before rendering (outside the component)! (2) Given the same input, they should always return the same output! React offers a **Strict Mode** in which it calls each component’s function twice during development (doesn't affect production) to help find components that break these rules! Note that if we use `npx creat-react-app`, root component is wrapped into `<React.StrictMode></React.StrictMode>` by default!
 
 ### Component Example
 ```js
@@ -80,21 +80,38 @@ How you export the component dictates how you must import it!
 - When you write a default import, you can put any name you want after import! For example, you could write `import AnyName from './Button.js'` instead and it would still provide you with the same default export. In contrast, with named imports, the name has to match on both sides. That’s why they are called named imports!
 - People often use default exports if the file exports only one component, and use named exports if it exports multiple components and values. To reduce potential confusion, some teams choose to only stick to one style (default or named), or avoid mixing them in a single file.
 
-
-
-## Add Styles
-Suppose we have a CSS file `styles.css`:
+### Import Styles
+Suppose we have a CSS file `style.css`:
 ```css
 .container {
     margin: 10px;
 }
+
 ```
-Suppose a component is in the same folder as the CSS file and wants to add it:
+Suppose a component is in the same folder as the CSS file and wants to load it:
 ```js
 import './style.css';
 
 // className works the same way as the HTML class attribute
 <div className="container"></div>
+```
+
+**Note that even if we import the css file in one of the component files, the styles are applied globally to the entire application!!!** In order to scope styles to a specific component, we should use **CSS Modules**:
+1. Rename the css file: `style.module.css`
+2. Import and use the css module: 
+```js
+import styles from './style.module.css';
+
+<div className={styles.container}></div>
+```
+
+### Import Images
+Suppose we have an image file `image.jpg`, and suppose a component is in the same folder as the image file and wants to load it:
+```js
+import img from './image.jpg';
+
+// Note that 'img' is a string which is the actual path to 'image.jpeg'! Don't write src='./image.jpg'!!!
+<img src={img} />
 ```
 
 
@@ -165,13 +182,15 @@ const itemList = items.map(item =>
 );
 
 return (
+    {/* 'itemList' is an array! We can put an array inside curly braces! */}
     <ul>{itemList}</ul>
 );
 ```
 
 ### Responding to Events
 - Events propagate upwards. Call `e.stopPropagation()` inside the event handler of the child component to prevent that.
-- Events may have unwanted default browser behavior. Call `e.preventDefault()` to prevent that.
+- Events may have unwanted default browser behavior. Call `e.preventDefault()` inside the event handler to prevent that.
+- For more details about passing functions, see JavaScript Callback for reference!
 
 ```js
 function MyButton() {
@@ -197,7 +216,7 @@ function MyButton() {
 
 ## Props
 - React components use **props** to communicate with each other. Every parent component can pass some information (props) to its child components. Props are passed to components in a way that is similar to passing arguments to a function!
-- Props can be any JavaScript value, including strings, numbers, booleans, objects (arrays and functions), and even components! They should be inside curly braces!
+- Props can be any JavaScript value, including strings, numbers, booleans, objects (arrays and functions), and even components! They should be inside curly braces (except strings, they also can be just inside quotes)!
 - Props are not always static, a component may receive different props over time! Props reflect a component’s data at any point in time, rather than only in the beginning.
 - Props are **immutable**, so that we can't change props! If we need interactivity, we should set state! 
 
@@ -214,7 +233,7 @@ export function User(props) {
 
 <User person={{ name: 'Liam', age: 24 }} address={'Chicago'} />
 ```
-The above is equivalent to `destructuring` (recommended):
+The above is equivalent to `destructuring` (recommended!):
 ```js
 export function User({ person, address }) {
     return (
@@ -242,7 +261,7 @@ function Parent(props) {
 ```
 
 ### `children` prop
-If we nest content inside a JSX tag, then the parent component will receive that content as a `children` prop:
+If we nest content inside component tags, then the parent component will receive that content as a `children` prop:
 ```js
 function Parent({ children }) {
     return (
@@ -299,3 +318,15 @@ function MyButton() {
 ### Sharing data between components
 If we need components to **share data and always update together**, we can first **move the state up** from the child components into the closest parent component containing all of them, and then **pass the state down** as props!
 
+## Deployment
+### GitHub pages
+- [Tutorial](https://www.linkedin.com/pulse/deploy-your-react-app-using-github-pages-hasibul-islam/)
+- Note that after installing gh-pages and editing package.json, we should push all the changes to repo! Then we run `npm run deploy` and we are all set! If we change the project, we should push all the changes to repo and then run `npm run deploy` again to deploy the project with latest changes!
+
+### Netlify
+1. Make sure the project has no warnings because Netlify treats warnings as errors!
+2. 
+  - `npm run build` - this can create a build folder
+  - Sites -> Add new site -> Deploy manually -> choose build folder
+  **OR**
+  - Sites -> Add new site -> Import an existing project -> GitHub -> choose a repo -> Build command: `npm run build`, Publish directory: `build` (Benefit: every time we push changes to GitHub, Netlify will automatically rebuild our project!)
