@@ -16,7 +16,12 @@
 - We should at least keep `index.html` (page template) and `src/main.jsx` (entry point)!
 - Must use `.jsx` extension
 
+
 ## Theories
+### UI as a Tree
+1. **Render trees** represent the nested relationship between React components across a single render.
+2. **Dependency trees** represent the module dependencies in a React app.
+
 ### Trigger, Render, and Commit
 Any screen update in a React app happens in three steps:
 1. Trigger a render
@@ -33,6 +38,10 @@ Any screen update in a React app happens in three steps:
    After rendering (calling) your components, React will modify the DOM tree. React only changes the DOM if there’s a difference between renders!
    1. For the initial render: React will use the `appendChild()` DOM API to put all the DOM nodes it has created on screen.
    2. For the re-renders: React will apply the minimal necessary operations (calculated while rendering!) to make the DOM match the latest rendering output.
+
+When to trigger re-renders:
+1. When the component's state or props is updated.
+2. When the parent component is re-rendered.
 
 
 ## Component
@@ -173,11 +182,12 @@ return (
 ```
 
 ### Rendering List
+- We should give each array item a key - a string or a number that uniquely identifies that item!
+- If data comes from database, then key can be database ID; If data is generated locally, then use an incrementing counter, crypto.randomUUID(), or uuid package when creating items!
+- React uses the keys to know what happened if we later insert, delete, or reorder the items.
+  
 ```js
 const items = [{ id: 1, name: 'Apple' }, { id: 2, name: 'Banana' }];
-// We should give each array item a key - a string or a number that uniquely identifies that item!
-// If data comes from database, then key can be database ID; If data is generated locally, then use an incrementing counter, crypto.randomUUID(), or uuid package when creating items!
-// React uses the keys to know what happened if we later insert, delete, or reorder the items.
 // The following syntax is called implicit return! It is the same as item => { return <li>...</li> }!
 const itemList = items.map(item =>
     <li key={item.id}>
@@ -192,27 +202,32 @@ return (
 ```
 
 ### Responding to Events
-- Events propagate upwards. Call `e.stopPropagation()` inside the event handler of the child component to prevent that.
-- Events may have unwanted default browser behavior. Call `e.preventDefault()` inside the event handler to prevent that.
+- Events propagate upwards. Call `e.stopPropagation()` inside the event handler of the child component to prevent that. 
+- Events may have unwanted default browser behavior. Call `e.preventDefault()` inside the event handler to prevent that. 
+- We can handle events by passing event handler functions as props. Event handler functions (1) Must be passed, not called (no parentheses) (2) Are usually defined inside the components and passed as props to children (3) Have names that start with `handle` and followed by the name of the event (4) Can also be defined inline using regular or arrow functions 
 - For more details about passing functions, see JavaScript Callback for reference!
 
 ```js
 function MyButton() {
-    // The event handler functions (1) Are usually defined inside the components (2) Have names that start with 'handle'
+    // A <form> submit event (onSubmit), which happens when a button inside of it is clicked, will reload the whole page by default. We should prevent this unwanted default behaivor!
+    function handleSubmit(e) {
+        e.stopDefault();
+    }
+
     function handleClick() {
         alert('You clicked me!');
     }
 
     return (
-        // We can also write inline event handlers using regular or arrow functions
-        // No parentheses! We pass the function instead of calling the function!
-        <button onClick={handleClick}>I'm a button</button>
-        <button onClick={(e) => {
-            e.stopPropagation();
-            e.preventDefault();
-            handleClick();
-        }}>I'm a button</button>
-
+        <form onSubmit={handleSubmit}>
+            <div onClick={handleClick}>
+                <button onClick={(e) => {
+                    {/* The onClick event can propogate upwards so that clicking the button can show 2 alerts! We should stop propagation! */}
+                    e.stopPropagation();
+                    handleClick();
+                }}>I'm a button</button>
+            </div>
+        </form>
     );
 }
 ```
@@ -289,25 +304,36 @@ We often use the `children` prop for visual wrappers: panels, grids, etc.
 ## Hooks
 - Functions starting with `use` are called **Hooks**. 
 - Hooks are special functions that are only available while React is rendering. They let you “hook into” different React features.
-- Hooks can only be called ***at the top of*** the components or our own Hooks! We cannot call Hooks inside conditions, loops, or other nested functions. If we need that, extract a new component and move the state into it!
+- Hooks can only be called ***at the top of*** (still inside) the components or our own Hooks! We cannot call Hooks inside conditions, loops, or other nested functions. If we need that, extract a new component and move the state into it!
 - [Built-in React Hooks](https://react.dev/reference/react/hooks)
 
 ### `useState`
 - [Documentation](https://react.dev/reference/react/useState)
 - Often, we want our components to “remember” some information and display it. In React, this kind of component-specific memory is called ***state***.
 - `useState` Hook provides two things: (1) A state variable to store the data between re-renders (2) A state setter function to update the state variable and trigger React to re-render the component.
-- State is private to the component declaring it! If we render the same component twice, each copy gets its own isolated state! Changing one of them will not affect the other.
+- State is private to the component declaring it! If we render the same component twice, each copy gets its own isolated state! Changing one of them will not affect the other!
+- State is different from regular JS variables, it behaves more like a snapshot. Setting it doesn't change the state variable we already have, but instead triggers a re-render!
+- Setting state only changes it for the ***next*** render! A state variable's value **is fixed within a render**! 
+- React waits until all code in the event handlers has run before processing the state updates, this is called **batching**, which makes the React app run faster by triggering fewer re-renders!
+- If we want to update the same state variable multiple times before the next render, instead of passing the **next state value** like `setCount(count + 1)`, we should pass an **updater function** like `setCount(n => n + 1)`!
 
 ```js
 import { useState } from 'react';
 
 function MyButton() {
-    // const [current state, function that lets you update the current state] = useState(initial value)
+    // const [state variable, state setter function to update the state variable] = useState(initial value)
     const [count, setCount] = useState(0);
 
     function handleClick() {
-        // Update the current state to a new value and trigger a re-render
+        // Replace the state variable 'count' with a new value 'count + 1'
         setCount(count + 1);
+        // Same as above!
+        setCount(count + 1);
+        // Increase the state variable 'count' in relation to its latest state!!!
+        setCount(n => n + 1);
+
+        // 'count' is fixed within a render!
+        console.log(count);
     }
 
     return (
@@ -317,6 +343,112 @@ function MyButton() {
     );
 }
 ```
+
+#### Updating Objects in State
+- In React, state can hold any JavaScript value. If state is an object, although it is technically mutable, we should treat it **as if it is immutable** (like numbers, strings, and booleans)! So that the setter function should **replace** it with a new object instead of mutating it!!!
+- If we want to include existing data as part of the new object, then we can use spread syntax and only incude property values that we want to override!
+- [Update a nested object](https://react.dev/learn/updating-objects-in-state#updating-a-nested-object)
+- [Write concise update logic with Immer - Optional](https://react.dev/learn/updating-objects-in-state#write-concise-update-logic-with-immer)
+
+```js
+import { useState } from 'react';
+
+const UseStateObject = () => {
+  const [person, setPerson] = useState({
+    name: 'peter',
+    age: 24,
+    hobby: 'read books'
+  });
+
+  const displayPerson = () => {
+    // setPerson({
+    //   name: 'liam',
+    //   age: 25,
+    //   hobby: 'travel'
+    // });
+
+    // Spread syntax
+    setPerson({
+      ...person,
+      age: 27,
+      hobby: 'go home'
+    });
+  }
+  
+  return (
+    <>
+      <h3>{person.name}</h3>
+      <h3>{person.age}</h3>
+      <h4>Enjoys: {person.hobby}</h4>
+      <button className='btn' onClick={displayPerson}>
+        Show Liam
+      </button>
+    </>
+
+  );
+};
+```
+
+#### Updating Arrays in State
+- Since array is another kind of object in JavaScript, if state is an array, we should treat it as if it is immutable! So that the setter function should **replace** it with a new array instead of mutating it!!!
+- 1. Add: spread syntax
+  2. Remove: `filter`
+  3. Change: `map`
+  4. Other changes like reverse or sort: Copy the array first and then make changes!
+- [Write concise update logic with Immer - Optional](https://react.dev/learn/updating-arrays-in-state#write-concise-update-logic-with-immer)
+
+```js
+import { useState } from "react";
+
+// We should define it outside the component to retain its value between re-renders!
+let currentId = 0;
+
+const UseStateArray = () => {
+  const [value, setValue] = useState('');
+  const [people, setPeople] = useState([]);
+
+  const addItem = () => {
+    setPeople([
+      ...people,
+      { id: currentId++, name: value }
+    ])
+  }
+
+  const removeItem = (id) => {
+    setPeople(people.filter((person) => person.id !== id));
+  }
+
+  const updateItem = (id) => {
+    setPeople(people.map((person) => {
+      if (person.id === id) {
+        return { ...person, name: person.name + '✔' }
+      } else {
+        return person
+      }
+    }));
+  }
+  
+  return (
+    <div>
+      <input onChange={(e) => setValue(e.target.value)} />
+      <button className="btn" onClick={addItem}>Add</button>
+      
+      {people.map((person) => {
+        return (
+          <div className="item" key={person.id}>
+            <h4>{person.name}</h4>
+            <button className="btn" onClick={() => removeItem(person.id)}>remove</button>
+            <button className="btn" onClick={() => updateItem(person.id)}>update</button>
+          </div>
+        );
+      })}
+    </div>
+  );
+};
+```
+
+### `useRef`
+- [Documentation](https://react.dev/reference/react/useRef)
 
 
 ### Sharing data between components

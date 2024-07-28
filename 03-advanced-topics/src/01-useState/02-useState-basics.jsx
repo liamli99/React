@@ -4,8 +4,8 @@ const UseStateBasics = () => {
   const [count, setCount] = useState(0);
 
   const handleClick = () => {
+    // Replace the state variable 'count' with a new value 'count + 1'
     setCount(count + 1);
-    console.log(count);
   }
 
   return (
