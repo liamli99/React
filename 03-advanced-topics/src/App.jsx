@@ -1,10 +1,10 @@
 import './App.css';
-import UseStateArray from './01-useState/03-useState-array';
+import MultipleEffects from './02-useEffect/03-multiple-effects';
 
 function App() {
   return (
     <div className='container'>
-      <UseStateArray />
+      <MultipleEffects />
     </div>
   );
 }

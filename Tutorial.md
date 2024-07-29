@@ -44,6 +44,7 @@ When to trigger re-renders:
 2. When the parent component is re-rendered.
 
 
+
 ## Component
 - React apps are made out of **componens**. A component is a piece of the **reusable UI** (user interface) that has its own logic and appearance. A component can be as small as a button, or as large as an entire page.
 - Components are **JavaScript functions** that return **HTML-like markup**. If the markup only has one line, then we can directly return it (we can further remove the curly braces and return because of arrow function shortcut!); However, if the markup has multiple lines, we should wrap it in a pair of parentheses! 
@@ -71,6 +72,11 @@ export default function App() {
     );
 }
 ```
+
+### Component Lifecycle
+1. A component ***mounts*** when it is added to the screen/DOM
+2. A component ***updates*** when it receives new state or props
+3. A component ***unmounts*** when it is removed from the screen/DOM
 
 
 ## Export and Import
@@ -310,11 +316,11 @@ We often use the `children` prop for visual wrappers: panels, grids, etc.
 ### `useState`
 - [Documentation](https://react.dev/reference/react/useState)
 - Often, we want our components to “remember” some information and display it. In React, this kind of component-specific memory is called ***state***.
-- `useState` Hook provides two things: (1) A state variable to store the data between re-renders (2) A state setter function to update the state variable and trigger React to re-render the component.
+- `useState` Hook returns an array with two values: (1) A state variable to store the data between re-renders (2) A state setter function to update the state variable and trigger React to re-render the component.
 - State is private to the component declaring it! If we render the same component twice, each copy gets its own isolated state! Changing one of them will not affect the other!
 - State is different from regular JS variables, it behaves more like a snapshot. Setting it doesn't change the state variable we already have, but instead triggers a re-render!
 - Setting state only changes it for the ***next*** render! A state variable's value **is fixed within a render**! 
-- React waits until all code in the event handlers has run before processing the state updates, this is called **batching**, which makes the React app run faster by triggering fewer re-renders!
+- React waits until all code in the event handlers has run before processing the state updates (re-render), this is called **batching**, which makes the React app run faster by preventing multiple re-renders during a single event!
 - If we want to update the same state variable multiple times before the next render, instead of passing the **next state value** like `setCount(count + 1)`, we should pass an **updater function** like `setCount(n => n + 1)`!
 
 ```js
@@ -449,6 +455,52 @@ const UseStateArray = () => {
 
 ### `useRef`
 - [Documentation](https://react.dev/reference/react/useRef)
+- If we want a component to “remember” some information, but we don’t want that information to trigger re-renders, then we can use a **ref**.
+- `useRef` Hook returns an object (ref) with a single property `current`. We can directly change `ref.current`, and the component doesn't re-render! Like state, ref is also retained between re-renders!
+- We should use refs when the component needs to store some value between re-renders, and the value doesn't impact the rendering logic!
+- The most common use case of refs is to store and manipulate DOM elements.
+
+#### Differences between `useRef` and `useState`
+| ref | state | 
+|:------:|:------:|
+| Returns `{ current: initialValue }` | Returns `[state, setState]` |
+| Doesn't trigger re-render when you change it | Triggers re-render when you change it |
+| Mutable - we can modify ref.current's value outside of the rendering, it changes immediately | Immutable - we must use setter function to modify state, it changes for the next render |
+| We shouldn't read or write ref.current during rendering | We can read state at any time |
+
+### `useEffect`
+- [Documentation](https://react.dev/reference/react/useEffect)
+- If we want to synchronize the component with some external systems, we should use **Effects**. Effects are side effects that are caused by rendering itself!
+- By default, Effects run after every render (initial render and re-render)!
+- `useEffect` Hook takes 2 parameters: (1) setup function (2) dependencies (optional)
+
+#### Usage
+```js
+import { useEffect, useRef } from 'react';
+
+function App() {
+    useEffect(() => {
+        // This code runs after every render (initial render and re-render)
+    });
+
+    useEffect(() => {
+        // This code runs only when the component mounts (added to the screen, initial render!)
+    }, []); 
+
+    useEffect(() => {
+        // This code runs when the component mounts and also if either prop or state has changed
+    }, [prop, state]) // 
+
+    useEffect(() => {
+        // ...
+
+        // Optional: This is a cleanup function that runs each time before the Effects runs again, and one final time when the component unmounts (removed from the screen)
+        return () => {
+        }
+    })
+}
+```
+
 
 
 ### Sharing data between components
