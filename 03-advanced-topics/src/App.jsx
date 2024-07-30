@@ -1,10 +1,10 @@
 import './App.css';
-import CleanupFunction from './02-useEffect/05-cleanup-function';
+import List from './05-JavaScript-tricks/List';
 
 function App() {
   return (
     <div className='container'>
-      <CleanupFunction />
+      <List />
     </div>
   );
 }
