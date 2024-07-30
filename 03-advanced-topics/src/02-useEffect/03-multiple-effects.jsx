@@ -6,17 +6,17 @@ const MultipleEffects = () => {
 
   // There can be multiple useEffects
 
-  // This function runs when the component mounts on the initial render and also if value has changed
+  // This function runs when the component mounts and also if value has changed
   useEffect(() => {
     console.log('hello from first useEffect');
   }, [value]);
 
-  // This function runs when the component mounts on the initial render and also if secondValue has changed
+  // This function runs when the component mounts and also if secondValue has changed
   useEffect(() => {
     console.log('hello from second useEffect');
   }, [secondValue]);
 
-  // This function runs when the component mounts on the initial render and also if either value or secondValue has changed
+  // This function runs when the component mounts and also if either value or secondValue has changed
   useEffect(() => {
     console.log('hello from either first or second useEffect');
   }, [value, secondValue]);

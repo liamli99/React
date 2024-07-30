@@ -40,7 +40,7 @@ Any screen update in a React app happens in three steps:
    2. For the re-renders: React will apply the minimal necessary operations (calculated while rendering!) to make the DOM match the latest rendering output.
 
 When to trigger re-renders:
-1. When the component's state or props is updated.
+1. When the component's state or props is changed.
 2. When the parent component is re-rendered.
 
 
@@ -182,6 +182,7 @@ return (
     {/* Tenary operator, same as the if statement! */}
     {age > 18 ? <p>Come</p> : <p>Leave</p>}
     {/* Logical AND operator, it works when we don't want the else branch! */}
+    {/* If age > 18, then <p>Come</p>; If age <= 18, then nothing! */}
     {/* Don't put number on the left side of &&, put a boolean! */}
     {age > 18 && <p>Come</p>}
 );
@@ -472,7 +473,8 @@ const UseStateArray = () => {
 - [Documentation](https://react.dev/reference/react/useEffect)
 - If we want to synchronize the component with some external systems, we should use **Effects**. Effects are side effects that are caused by rendering itself!
 - By default, Effects run after every render (initial render and re-render)!
-- `useEffect` Hook takes 2 parameters: (1) setup function (2) dependencies (optional)
+- `useEffect` Hook takes 2 parameters: (1) Setup function, it optionally returns a cleanup function (2) Dependencies (optional). To prevent lint errors, we can't choose dependencies, they are actually determined by the Effect's code!!!
+- [You Might Not Need an Effect](https://react.dev/learn/you-might-not-need-an-effect)
 
 #### Usage
 ```js
@@ -480,24 +482,20 @@ import { useEffect, useRef } from 'react';
 
 function App() {
     useEffect(() => {
-        // This code runs after every render (initial render and re-render)
+        // This setup code runs after every render (initial render and re-render)
     });
 
     useEffect(() => {
-        // This code runs only when the component mounts (added to the screen, initial render!)
+        // This setup code runs only when the component mounts (added to the screen, initial render)
     }, []); 
 
     useEffect(() => {
-        // This code runs when the component mounts and also if either prop or state has changed
-    }, [prop, state]) // 
+        // This setup code runs (1) when the component mounts (2) if either props or state has changed (triggering re-render), run with new props and state
 
-    useEffect(() => {
-        // ...
-
-        // Optional: This is a cleanup function that runs each time before the Effects runs again, and one final time when the component unmounts (removed from the screen)
+        // Optional: This is a cleanup function that runs (1) when the component unmounts (removed from the screen) (2) if either props or state has changed, run with old props and state (before setup code runs with new props and state!!!)
         return () => {
         }
-    })
+    }, [props, state]) 
 }
 ```
 

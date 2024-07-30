@@ -1258,7 +1258,7 @@ bool = !val; // bool is now true
 ```js
 import { useState } from 'react';
 
-const ShortCircuitOverview = () => {
+const ShortCircuitExamples = () => {
   // falsy
   const [text, setText] = useState('');
   // truthy
@@ -1307,7 +1307,7 @@ const SomeComponent = ({ name }) => {
     </div>
   );
 };
-export default ShortCircuitEvaluation;
+export default ShortCircuitExamples;
 ```
 
 #### Ternary Operator

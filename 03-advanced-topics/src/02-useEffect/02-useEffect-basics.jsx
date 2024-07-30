@@ -6,7 +6,7 @@ const UseEffectBasics = () => {
     setValue(value + 1);
   }
 
-  // This function only runs when the component mounts (initial render)!
+  // This function only runs when the component mounts (added to the screen)!
   useEffect(() => {
     handleClick();
   }, [])

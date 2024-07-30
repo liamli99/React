@@ -1,10 +1,10 @@
 import './App.css';
-import MultipleEffects from './02-useEffect/03-multiple-effects';
+import CleanupFunction from './02-useEffect/05-cleanup-function';
 
 function App() {
   return (
     <div className='container'>
-      <MultipleEffects />
+      <CleanupFunction />
     </div>
   );
 }
