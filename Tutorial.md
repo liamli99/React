@@ -6,15 +6,19 @@
 ## Create React applications
 ### Create React App
 - [Documentation](https://create-react-app.dev/docs/getting-started)
-- `npx create-react-app my-app` -> `cd my-app` -> `npm start`
+- Create a new project: `npx create-react-app my-app` -> `cd my-app` -> `npm start`
 - We should at least keep `public/index.html` (page template) and `src/index.js` (entry point)!
+- Upload to GitHub: Make sure to remove `node_modules` folder and `package-lock.json` file
+- Clone from GitHub: `npm install` -> `npm start`
 
 
 ### Vite (Recommended!)
 - [Documentation](https://vitejs.dev/guide/)
-- `npm create vite@latest my-app -- --template react` -> `cd my-app` -> `npm install` -> `npm run dev`
+- Create a new project: `npm create vite@latest my-app -- --template react` -> `cd my-app` -> `npm install` -> `npm run dev`
 - We should at least keep `index.html` (page template) and `src/main.jsx` (entry point)!
 - Must use `.jsx` extension
+- Upload to GitHub: Make sure to remove `node_modules` folder and `package-lock.json` file
+- Clone from GitHub: `npm install` -> `npm run dev`
 
 
 ## Theories
@@ -334,6 +338,57 @@ We often use the `children` prop for visual wrappers: panels, grids, etc.
   - By using `FormData`, we don't need to make input controlled! It means that we don't need to set `value`/`checked` attribute and `onChange` event handler. We can set `defaultValue` or `defaultChecked` to specify the initial value
   - We must include `name` attribute because it is used as a key in form data!!! 
 
+### Controlled Inputs
+```js
+import { useState } from "react";
+
+const ControlledInputs = () => {
+  const [name, setName] = useState('');
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // Do something with name, then make input empty
+    setName('');
+  }
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <div>
+        <label htmlFor='name'>Name</label>
+        <input type='text' id='name' value={name} onChange={(e) => setName(e.target.value)} />
+        <button>Submit</button>
+      </div>
+    </form>
+  );
+}
+```
+
+### Uncontrolled Inputs
+Besides `FormData`, we can also use `useRef` to write uncontrolled inputs!
+
+```js
+const UncontrolledInputs = () => {
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const formData = new FormData(e.currentTarget);
+    const user = Object.fromEntries(formData);
+    // Do some thing with user, user is an object that has input name as property and input value as value
+    // Then make input empty
+    e.currentTarget.reset();
+  }
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <div>
+        <label htmlFor='name'>Name</label>
+        <input type='text' id='name' name='name' />
+        <button>Submit</button>
+      </div>
+    </form>
+  );
+}
+```
 
 
 ## Hooks
@@ -487,7 +542,30 @@ const UseStateArray = () => {
 - If we want a component to “remember” some information, but we don’t want that information to trigger re-renders, then we can use a **ref**.
 - `useRef` Hook returns an object (ref) with a single property `current`. We can directly change `ref.current`, and the component doesn't re-render! Like state, ref is also retained between re-renders!
 - We should use refs when the component needs to store some value between re-renders, and the value doesn't impact the rendering logic!
-- The most common use case of refs is to store and manipulate DOM elements.
+- The most common use case of refs is to manipulate DOM elements. Usually, we use refs for non-destructive actions like focusing, scrolling, or meauring DOM elements.
+
+```js
+import { useRef } from 'react';
+
+function UseRef() {
+  const inputRef = useRef(null);
+
+  function handleClick() {
+    // Besides `FormData`, we can also use `useRef` to write uncontrolled inputs!
+    console.log(inputRef.current.value);
+    // Focus the input
+    inputRef.current.focus();
+  }
+
+  return (
+    <>
+      {/* Put this input's DOM node into inputRef.current! */}
+      <input ref={inputRef} />
+      <button onClick={handleClick}>Focus the input</button>
+    </>
+  );
+}
+```
 
 #### Differences between `useRef` and `useState`
 | ref | state | 
@@ -496,6 +574,8 @@ const UseStateArray = () => {
 | Doesn't trigger re-render when you change it | Triggers re-render when you change it |
 | Mutable - we can modify ref.current's value outside of the rendering, it changes immediately | Immutable - we must use setter function to modify state, it changes for the next render |
 | We shouldn't read or write ref.current during rendering | We can read state at any time |
+
+
 
 ### `useEffect`
 - [Documentation](https://react.dev/reference/react/useEffect)
@@ -528,6 +608,9 @@ function App() {
 ```
 
 
+## Custom Hooks
+
+
 
 ### Sharing data between components
 If we need components to **share data and always update together**, we can first **move the state up** from the child components into the closest parent component containing all of them, and then **pass the state down** as props!
@@ -544,3 +627,9 @@ If we need components to **share data and always update together**, we can first
   - Sites -> Add new site -> Deploy manually -> choose build folder
   **OR**
   - Sites -> Add new site -> Import an existing project -> GitHub -> choose a repo -> Build command: `npm run build`, Publish directory: `build` (Benefit: every time we push changes to GitHub, Netlify will automatically rebuild our project!)
+
+
+
+# Figma
+
+

@@ -1,10 +1,10 @@
 import './App.css';
-import UncontrolledInputs from './06-forms/05-form-data';
+import UseRefAdvanced from './07-useRef/02-useRef-advanced';
 
 function App() {
   return (
     <div className='container'>
-      <UncontrolledInputs />
+      <UseRefAdvanced />
     </div>
   );
 }
