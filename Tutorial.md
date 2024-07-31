@@ -308,6 +308,34 @@ export default function App() {
 We often use the `children` prop for visual wrappers: panels, grids, etc.
 
 
+
+## Forms
+- `<label>`
+  - [Documentation](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/label)
+  - `htmlFor` attribute is used to **associate** a label with a form control (e.g. button, input, select, textarea), the value of `id` attribute of the form control should be the same as the value of `htmlFor` attribute of label!
+
+- `<input>`: 
+  - [JavaScript Documentation](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input)
+  - [React Documentation](https://react.dev/reference/react-dom/components/input)
+  - `id` attribute is used for label association
+  - `name` attribute is used as key in `FormData`
+  - For text input, we can set `value` to a state variable to make the input **controlled**! Note that if we set `value`, we have to add `onChange` event handler to the input! Otherwise, the input is read-only!
+  - For checkbox/radio input, we set `checked` instead of `value` to make input controlled! If we set `checked`, we also have to add `onChange`!
+  - If we don't want to make input controlled, we can set `defaultValue` or `defaultChecked` to specify the initial value for the input!
+
+- `<select>`:
+  - [Documentation](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/select)
+  - Usage is similar to text input! We can set `value`  attribute to a state variable to make the select box controlled! If we set `value`, we have to add `onChange`!
+  - We need to include a list of `<option>`s inside `<select>`!
+
+
+- `FormData` API
+  - We can use `FormData` API to handle multiple inputs!
+  - By using `FormData`, we don't need to make input controlled! It means that we don't need to set `value`/`checked` attribute and `onChange` event handler. We can set `defaultValue` or `defaultChecked` to specify the initial value
+  - We must include `name` attribute because it is used as a key in form data!!! 
+
+
+
 ## Hooks
 - Functions starting with `use` are called **Hooks**. 
 - Hooks are special functions that are only available while React is rendering. They let you “hook into” different React features.

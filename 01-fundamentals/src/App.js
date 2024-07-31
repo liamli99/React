@@ -24,6 +24,7 @@ const EventExample = () => {
     }
     const handleFormInput = (e) => {
         console.log(`Input Name: ${e.target.name}`);
+        console.log(`Input Id: ${e.target.id}`);
         console.log(`Input Value: ${e.target.value}`);
     }
     const handleButtonClick = () => {
@@ -34,7 +35,7 @@ const EventExample = () => {
         <section>
             <form onSubmit={handleFormSubmission}>
                 <h2>Form</h2>
-                <input name='example' onChange={handleFormInput} />
+                <input name='example1' id='example2' onChange={handleFormInput} />
                 <button>Submit</button>
             </form>
             <button onClick={handleButtonClick}>Click</button>

@@ -1,10 +1,10 @@
 import './App.css';
-import List from './05-JavaScript-tricks/List';
+import UncontrolledInputs from './06-forms/05-form-data';
 
 function App() {
   return (
     <div className='container'>
-      <List />
+      <UncontrolledInputs />
     </div>
   );
 }
