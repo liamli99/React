@@ -629,6 +629,13 @@ If we need components to **share data and always update together**, we can first
   - Sites -> Add new site -> Import an existing project -> GitHub -> choose a repo -> Build command: `npm run build`, Publish directory: `build` (Benefit: every time we push changes to GitHub, Netlify will automatically rebuild our project!)
 
 
+# Useful npm Packages
+## `react-icons`
+- [Documentation](https://react-icons.github.io/react-icons/)
+- `npm install react-icons`
+- Include popular icons in your React projects!
+
+
 
 # Figma
 

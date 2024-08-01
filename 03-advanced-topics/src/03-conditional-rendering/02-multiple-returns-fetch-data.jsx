@@ -35,6 +35,7 @@ const MultipleReturnsFetchData = () => {
   }, []);
 
   // Loading. The order matters!!! It must be placed before error and success!
+  // If we want to test loading, we can right click -> Inspect -> Network -> Fast 3G!
   if (isLoading) {
     return <h2>Loading...</h2>
   }
