@@ -400,7 +400,7 @@ const UncontrolledInputs = () => {
 ### `useState`
 - [Documentation](https://react.dev/reference/react/useState)
 - Often, we want our components to “remember” some information and display it. In React, this kind of component-specific memory is called ***state***.
-- `useState` Hook returns an array with two values: (1) A state variable to store the data between re-renders (2) A state setter function to update the state variable and trigger React to re-render the component.
+- `useState` Hook returns an array with two values: (1) A state variable to retain the data between re-renders (2) A state setter function to update the state variable and trigger React to re-render the component.
 - State is private to the component declaring it! If we render the same component twice, each copy gets its own isolated state! Changing one of them will not affect the other!
 - State is different from regular JS variables, it behaves more like a snapshot. Setting it doesn't change the state variable we already have, but instead triggers a re-render!
 - Setting state only changes it for the ***next*** render! A state variable's value **is fixed within a render**! 
@@ -420,9 +420,9 @@ function MyButton() {
         // Same as above!
         setCount(count + 1);
         // Increase the state variable 'count' in relation to its latest state!!!
-        setCount(n => n + 1);
+        setCount(count => count + 1);
 
-        // 'count' is fixed within a render!
+        // Setting 'count' only changes it for the next render! 'count' is fixed within a render!
         console.log(count);
     }
 

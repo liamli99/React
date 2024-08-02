@@ -16,6 +16,7 @@ const UseStateGotcha = () => {
   }
 
   // Try clicking Increase2 button multiple times within 3s, compare passing next state value and updater function!
+  // If we want to update the same state variable multiple times before the next render, instead of passing the next state value, we should pass an updater function!
   const handleClick2 = () => {
     // setTimeout(() => {
     //   setCount(count + 1);
