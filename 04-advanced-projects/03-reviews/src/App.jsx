@@ -1,4 +1,4 @@
-import './App.css'
+import './App.css';
 import { useState } from 'react';
 import { FaChevronLeft, FaChevronRight, FaQuoteRight } from 'react-icons/fa';
 import reviews from './data';
