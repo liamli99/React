@@ -10,7 +10,7 @@ function App() {
   const url = 'https://www.course-api.com/react-tours-project';
 
   // Note that we shouldn't define this function in Tour.jsx, because it doesn't have access to tours and setTours!
-  // So we have to pass this function from App.jsx to Tours.jsx to Tour.jsx!!!
+  // So we have to pass this function from App.jsx to Tours.jsx to Tour.jsx as props!!!
   const removeTour = (id) => {
     setTours(tours.filter((tour) => tour.id != id));
   }
