@@ -15,6 +15,7 @@ function App() {
     setTours(tours.filter((tour) => tour.id != id));
   }
 
+  // Reference: 03-advanced-topics -> 03-conditional-rendering/02-multiple-returns-fetch-data.jsx
   const fetchTours = async () => {
     // The initial value of isLoading is true, after the component mounts, isLoading is false!
     // So that if we remove all the tours, isLoading is still false! At this time, if we click the Refresh button to call fetchTours function, there is no loading before fetching the tours! So that we have to include this line of code here!
