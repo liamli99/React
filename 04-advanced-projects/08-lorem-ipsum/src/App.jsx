@@ -10,7 +10,7 @@ function App() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Input value is string!!!
+    // Input value is always string!!!
     const amount = Number(count);
     setText(data.slice(0, amount));
   }
