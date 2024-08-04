@@ -4,10 +4,12 @@ import { useState } from 'react';
 import Form from './Form';
 import Items from './Items';
 
-// Since there is no database, we use localStorage to store data in the browser!
+// Since there is no database, we can use localStorage to store data in the browser!
+// Save to local storage
 const setLocalStorage = (items) => {
   localStorage.setItem('items', JSON.stringify(items));
 }
+// Retrieve from local storage
 const getLocalStorage = () => {
   // If this is the first time to run this project, then there is nothing in localStorage, and JSON.parse(...) is null! If we set the initial value of 'items' to null, then 'items.map' is wrong in Items.jsx because null have no properties! So that we should also set a default value!
   return JSON.parse(localStorage.getItem('items')) || [];
@@ -31,10 +33,23 @@ function App() {
     setLocalStorage(newItems);
   }
 
+  const updateItem = (id) => {
+    const newItems = items.map((item) => {
+      if (item.id === id) {
+        return { ...item, completed: !item.completed }
+      } else {
+        return item
+      }
+    })
+    setItems(newItems);
+
+    setLocalStorage(newItems);
+  }
+
   return (
     <section className='section-center'>
       <Form addItem={addItem} />
-      <Items items={items} removeItem={removeItem} />
+      <Items items={items} removeItem={removeItem} updateItem={updateItem} />
     </section>
   );
 }

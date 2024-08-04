@@ -1,10 +1,10 @@
 import './App.css';
-import MultipleReturnsFetchData from './03-conditional-rendering/02-multiple-returns-fetch-data';
+import OtherInputs from './06-forms/04-other-inputs';
 
 function App() {
   return (
     <div className='container'>
-      <MultipleReturnsFetchData />
+      <OtherInputs />
     </div>
   );
 }

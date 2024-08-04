@@ -137,6 +137,11 @@ import img from './image.jpg';
 <img src={img} />
 ```
 
+However, if the image file is stored in **`public`** folder (not recommended!), we can directly write:
+```js
+<img src='./image.jpg' />
+```
+
 
 ## JSX
 - JSX is a syntax extension for JavaScript that lets you write HTML-like markup inside a JavaScript file. It is optional, but most React projects use JSX for its convenience and conciseness. 
@@ -194,7 +199,7 @@ return (
 
 ### Rendering List
 - We should give each array item a key - a string or a number that uniquely identifies that item!
-- If data comes from database, then key can be database ID; If data is generated locally, then use an incrementing counter, crypto.randomUUID(), or uuid package when creating items!
+- If data comes from database, then key can be database ID; If data is generated locally, then use an incrementing counter, crypto.randomUUID(), or uuid package (see Useful npm Packages!) when creating items!
 - React uses the keys to know what happened if we later insert, delete, or reorder the items.
   
 ```js
@@ -246,7 +251,7 @@ function MyButton() {
 
 ## Props
 - React components use **props** to communicate with each other. Every parent component can pass some information (props) to its child components. Props are passed to components in a way that is similar to passing arguments to a function!
-- Props can be any JavaScript value, including strings, numbers, booleans, objects (arrays and functions), and even components! They should be inside curly braces (except strings, they also can be just inside quotes)!
+- Props can be any JavaScript value, including strings, numbers, booleans, objects (arrays and functions), and even components! They should be inside curly braces (except strings, they can also be inside quotes)!
 - Props are not always static, a component may receive different props over time! Props reflect a component’s data at any point in time, rather than only in the beginning.
 - Props are **immutable**, so that we can't change props! If we need interactivity, we should set state! 
 
@@ -284,7 +289,7 @@ function Parent({ prop1, prop2, prop3 }) {
     return <Child prop1={prop1} prop2={prop2} prop3={prop3} />
 }
 
-// Spread syntax
+// Spread syntax, same as above!
 function Parent(props) {
     return <Child {...props} />
 }
@@ -635,6 +640,25 @@ If we need components to **share data and always update together**, we can first
 - `npm install react-icons`
 - Include popular icons in your React projects!
 
+## `uuid`
+- [Documentation](https://www.npmjs.com/package/uuid)
+- `npm install uuid`
+- Create a random UUID, normally used as a unique key prop for each child in a list!
+
+## `nanoid`
+- [Documentation](https://www.npmjs.com/package/nanoid)
+- `npm install nanoid`
+- Create a tiny, secure, unique string ID, normally used as a unique key prop for each child in a list!
+
+## `values.js`
+- [Documentation](https://www.npmjs.com/package/values.js)
+- `npm install values.js`
+- Get tints and shades of a CSS color
+
+## `react-toastify`
+- [Documentation](https://fkhadra.github.io/react-toastify/introduction/)
+- `npm install react-toastify`
+- Create notifications with ease
 
 
 # Figma

@@ -9,8 +9,12 @@ const OtherInputs = () => {
   const handleCheckbox = (e) => {
     console.log(e.target.checked);
     setIsChecked(e.target.checked);
+
+    // Alternative solution
+    // setIsChecked(!isChecked);
   }
 
+  // Similar to text input!
   const handleSelect = (e) => {
     console.log(e.target.value);
     setSelectItem(e.target.value);
