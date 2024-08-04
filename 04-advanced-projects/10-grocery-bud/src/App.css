@@ -252,6 +252,7 @@ ul {
   margin: 0 auto;
   margin-top: 1rem;
 }
+
 /* ============= PROJECT CSS =============== */
 
 .section-center {
@@ -273,6 +274,7 @@ form h4 {
   text-align: center;
   margin-bottom: 1.5rem;
 }
+
 .form-control {
   display: grid;
   grid-template-columns: 1fr 100px;

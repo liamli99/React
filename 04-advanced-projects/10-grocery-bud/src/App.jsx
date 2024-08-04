@@ -1,5 +1,7 @@
 import './App.css';
 import { nanoid } from 'nanoid';
+import { toast, ToastContainer } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 import { useState } from 'react';
 import Form from './Form';
 import Items from './Items';
@@ -24,6 +26,8 @@ function App() {
     setItems(newItems);
 
     setLocalStorage(newItems);
+
+    toast.success('Added!');
   }
 
   const removeItem = (id) => {
@@ -31,6 +35,8 @@ function App() {
     setItems(newItems);
 
     setLocalStorage(newItems);
+
+    toast.success('Deleted!');
   }
 
   const updateItem = (id) => {
@@ -50,6 +56,7 @@ function App() {
     <section className='section-center'>
       <Form addItem={addItem} />
       <Items items={items} removeItem={removeItem} updateItem={updateItem} />
+      <ToastContainer position='top-center' />
     </section>
   );
 }

@@ -25,7 +25,7 @@ function App() {
     <main>
       <Form addColor={addColor} />
       <ColorList colors={colors} />
-      {/* It controls where to palce the notification, i.e. toast */}
+      {/* It controls where to palce the notification, i.e. toast, so that it doesn't matter where this code is placed! */}
       <ToastContainer position='top-center' />
     </main>
   );

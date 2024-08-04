@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { toast } from 'react-toastify';
 
 const Form = ({ addItem }) => {
   const [name, setName] = useState('');
@@ -7,7 +8,10 @@ const Form = ({ addItem }) => {
     e.preventDefault();
 
     // Avoid adding empty string
-    if (!name) return;
+    if (!name) {
+      toast.warn('Please provide a value!');
+      return;
+    }
     addItem(name);
 
     // Make input empty
