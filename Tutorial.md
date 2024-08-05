@@ -655,6 +655,10 @@ function App() {
   ```
 
 ## Custom Hooks
+- [Documentation](https://react.dev/learn/reusing-logic-with-custom-hooks)
+- Custom Hook is just a JavaScript function that lets us share logic between components, it wraps reusable code and return what we need! It is very straightforward to use!
+- Same as other Hooks, Custom Hooks must be named starting with `use` followed by a capital letter
+
 
 
 
