@@ -21,9 +21,9 @@ const UseStateArray = () => {
   const updateItem = (id) => {
     setPeople(people.map((person) => {
       if (person.id === id) {
-        return { ...person, name: person.name + '✔' }
+        return { ...person, name: person.name + '✔' };
       } else {
-        return person
+        return person;
       }
     }));
   }

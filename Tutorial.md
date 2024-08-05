@@ -16,7 +16,7 @@
 - [Documentation](https://vitejs.dev/guide/)
 - Create a new project: `npm create vite@latest my-app -- --template react` -> `cd my-app` -> `npm install` -> `npm run dev`
 - We should at least keep `index.html` (page template) and `src/main.jsx` (entry point)!
-- Must use `.jsx` extension
+- Component files (return HTML-like markup) must use `.jsx` extension!
 - Upload to GitHub: Make sure to remove `node_modules` folder and `package-lock.json` file
 - Clone from GitHub: `npm install` -> `npm run dev`
 
@@ -51,7 +51,7 @@ When to trigger re-renders:
 
 ## Component
 - React apps are made out of **componens**. A component is a piece of the **reusable UI** (user interface) that has its own logic and appearance. A component can be as small as a button, or as large as an entire page.
-- Components are **JavaScript functions** that return **HTML-like markup**. If the markup only has one line, then we can directly return it (we can further remove the curly braces and return because of arrow function shortcut!); However, if the markup has multiple lines, we should wrap it in a pair of parentheses! 
+- Components are **JavaScript functions** that return **HTML-like markup (JSX)**. If the markup only has one line, then we can directly return it (we can further remove the curly braces and return because of arrow function shortcut!); However, if the markup has multiple lines, we should wrap it in a pair of parentheses! 
 - Just like with HTML tags, you can **compose, order and nest** components to design whole pages. 
 - Component names must start with a capital letter and use **PascalCase**.
 - You can nest a component inside another component, but never define a component inside another component! Please define every component at the top level! When a child component needs some data from a parent, pass it by props instead of nesting definitions.
@@ -416,7 +416,7 @@ const UncontrolledInputs = () => {
 import { useState } from 'react';
 
 function MyButton() {
-    // const [state variable, state setter function to update the state variable] = useState(initial value)
+    // const [state variable, state setter function] = useState(initial value)
     const [count, setCount] = useState(0);
 
     function handleClick() {
@@ -493,7 +493,7 @@ const UseStateObject = () => {
 - [Write concise update logic with Immer - Optional](https://react.dev/learn/updating-arrays-in-state#write-concise-update-logic-with-immer)
 
 ```js
-import { useState } from "react";
+import { useState } from 'react';
 
 // We should define it outside the component to retain its value between re-renders!
 let currentId = 0;
@@ -522,10 +522,14 @@ const UseStateArray = () => {
       }
     }));
   }
+
+  const handleChange = (e) => {
+    setValue(e.target.value);
+  }
   
   return (
     <div>
-      <input onChange={(e) => setValue(e.target.value)} />
+      <input value={value} onChange={handleChange} />
       <button className="btn" onClick={addItem}>Add</button>
       
       {people.map((person) => {
@@ -612,12 +616,12 @@ function App() {
 ```
 
 ### `useContext`
-- [Documentation](https://react.dev/reference/react/useContext)
+- [Documentation](https://react.dev/learn/passing-data-deeply-with-context)
 - Usually, we pass information from parent component to child component via props. However, if we have to pass the information through many components in the middle, or if many components need the same information, we can use ***context***! Context lets the parent component make some information available to any component in the tree below it!
 
 - 1. Step 1: **Create** a context
+  MyContext.js:
   ```js
-  // MyContext.jsx
   import { createContext } from 'react';
 
   // The default value is used when there is no matching context provider in the tree above the component that uses the context. If we don’t have any meaningful default value, leave it empty!
@@ -627,8 +631,8 @@ function App() {
   ```
   
   2. Step 2: **Provide** that context from the parent component that specifies the value
+  ParentComponent.jsx:
   ```js
-  // ParentComponent.jsx
   import MyContext from './MyContext';
 
   function ParentComponent() {
@@ -641,8 +645,8 @@ function App() {
   ```
   
   3. Step 3: **Use** that context from the child component that needs the value
+  ChildComponent.jsx:
   ```js
-  // ChildComponent.jsx
   import { useContext } from 'react';
   import MyContext from './MyContext';
 
@@ -654,9 +658,145 @@ function App() {
   }
   ```
 
+## `useReducer`
+- [documentation](https://react.dev/learn/extracting-state-logic-into-a-reducer)
+- A component can have many event handlers to update states. We can consolidate all the state update logic outside the component in a single function, called a ***reducer***!
+- Reducer is a different way to handle state! We can migrate from `useState` to `useReducer` in three steps:
+  1. Move from setting state to dispatching action object, the action object must include 'type' property and may include additional properties!
+  2. Write a reducer function, it has 2 parameters: state variable and action object, it returns the **next state value** (what we originally pass to the state setter function)!
+  3. Use the reducer from the component, `useReducer` has 2 parameters: reducer function and initial state value, it returns the state variable and dispatch function! 
+
+
+### Rewrite the example in 'Updating Arrays in State' using `useReducer`
+UseReducerExample.jsx:
+```js
+import { useReducer } from 'react';
+import peopleReducer from './peopleReducer';
+
+let currentId = 0;
+
+const UseReducerExample = () => {
+  // const [value, setValue] = useState('');
+  // const [people, setPeople] = useState([]);
+  const [state, dispatch] = useReducer(peopleReducer, { value: '', people: [] });
+
+  const addItem = () => {
+    // setPeople([
+    //   ...people,
+    //   { id: currentId++, name: value }
+    // ])
+
+    dispatch({
+      type: 'add',
+      id: currentId++,
+    });
+  }
+
+  const removeItem = (id) => {
+    // setPeople(people.filter((person) => person.id !== id));
+
+    dispatch({
+      type: 'remove',
+      id
+    })
+  }
+
+  const updateItem = (id) => {
+    // setPeople(people.map((person) => {
+    //   if (person.id === id) {
+    //     return { ...person, name: person.name + '✔' }
+    //   } else {
+    //     return person
+    //   }
+    // }));
+
+    dispatch({
+      type: 'update',
+      id
+    })
+  }
+
+  const handleChange = (e) => {
+    // setValue(e.target.value);
+
+    dispatch({
+      type: 'change',
+      value: e.target.value
+    })
+  }
+  
+  return (
+    <div>
+      <input value={state.value} onChange={handleChange} />
+      <button className="btn" onClick={addItem}>Add</button>
+      
+      {state.people.map((person) => {
+        return (
+          <div className="item" key={person.id}>
+            <h4>{person.name}</h4>
+            <button className="btn" onClick={() => removeItem(person.id)}>remove</button>
+            <button className="btn" onClick={() => updateItem(person.id)}>update</button>
+          </div>
+        );
+      })}
+    </div>
+  );
+};
+```
+
+peopleReducer.js:
+```js
+const peopleReducer = (state, action) => {
+  switch (action.type) {
+    case 'add': {
+      return {
+        ...state,
+        people: [
+          ...state.people,
+          { id: action.id, name: state.value }
+        ]
+      };
+    }
+
+    case 'remove': {
+      return {
+        ...state,
+        people: state.people.filter((person) => person.id !== action.id)
+      }
+    }
+
+    case 'update': {
+      return {
+        ...state,
+        people: state.people.map((person) => {
+          if (person.id === action.id) {
+            return { ...person, name: person.name + '✔' };
+          } else {
+            return person;
+          }
+        })
+      }
+    }
+
+    case 'change': {
+      return {
+        ...state,
+        value: action.value
+      }
+    }
+
+    default: {
+      throw Error('Unknown action: ' + action.type);
+    }
+  }
+}
+
+export default peopleReducer;
+```
+
 ## Custom Hooks
 - [Documentation](https://react.dev/learn/reusing-logic-with-custom-hooks)
-- Custom Hook is just a JavaScript function that lets us share logic between components, it wraps reusable code and return what we need! It is very straightforward to use!
+- Custom Hook is just a JavaScript function that lets us share logic between components, it wraps reusable code and returns what we need! It is very straightforward to use!
 - Same as other Hooks, Custom Hooks must be named starting with `use` followed by a capital letter
 
 
