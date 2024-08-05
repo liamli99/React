@@ -1,10 +1,10 @@
 import './App.css';
-import OtherInputs from './06-forms/04-other-inputs';
+import Navbar from './09-useContext/use-context/Navbar';
 
 function App() {
   return (
     <div className='container'>
-      <OtherInputs />
+      <Navbar />
     </div>
   );
 }

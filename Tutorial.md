@@ -544,7 +544,7 @@ const UseStateArray = () => {
 
 ### `useRef`
 - [Documentation](https://react.dev/reference/react/useRef)
-- If we want a component to “remember” some information, but we don’t want that information to trigger re-renders, then we can use a **ref**.
+- If we want a component to “remember” some information, but we don’t want that information to trigger re-renders, then we can use a ***ref***.
 - `useRef` Hook returns an object (ref) with a single property `current`. We can directly change `ref.current`, and the component doesn't re-render! Like state, ref is also retained between re-renders!
 - We should use refs when the component needs to store some value between re-renders, and the value doesn't impact the rendering logic!
 - The most common use case of refs is to manipulate DOM elements. Usually, we use refs for non-destructive actions like focusing, scrolling, or meauring DOM elements.
@@ -581,10 +581,9 @@ function UseRef() {
 | We shouldn't read or write ref.current during rendering | We can read state at any time |
 
 
-
 ### `useEffect`
 - [Documentation](https://react.dev/reference/react/useEffect)
-- If we want to synchronize the component with some external systems, we should use **Effects**. Effects are side effects that are caused by rendering itself!
+- If we want to synchronize the component with some external systems, we should use ***Effects***. Effects are side effects that are caused by rendering itself!
 - By default, Effects run after every render (initial render and re-render)!
 - `useEffect` Hook takes 2 parameters: (1) Setup function, it optionally returns a cleanup function (2) Dependencies (optional). To prevent lint errors, we can't choose dependencies, they are actually determined by the Effect's code!!!
 - [You Might Not Need an Effect](https://react.dev/learn/you-might-not-need-an-effect)
@@ -612,6 +611,48 @@ function App() {
 }
 ```
 
+### `useContext`
+- [Documentation](https://react.dev/reference/react/useContext)
+- Usually, we pass information from parent component to child component via props. However, if we have to pass the information through many components in the middle, or if many components need the same information, we can use ***context***! Context lets the parent component make some information available to any component in the tree below it!
+
+- 1. Step 1: **Create** a context
+  ```js
+  // MyContext.jsx
+  import { createContext } from 'react';
+
+  // The default value is used when there is no matching context provider in the tree above the component that uses the context. If we don’t have any meaningful default value, leave it empty!
+  const MyContext = createContext(defaultValue);
+
+  export default MyContext;
+  ```
+  
+  2. Step 2: **Provide** that context from the parent component that specifies the value
+  ```js
+  // ParentComponent.jsx
+  import MyContext from './MyContext';
+
+  function ParentComponent() {
+    return (
+      <MyContext.Provider value={...}>
+      {/* Where we want to use the value */}
+      </MyContext.Provider>
+    );
+  }
+  ```
+  
+  3. Step 3: **Use** that context from the child component that needs the value
+  ```js
+  // ChildComponent.jsx
+  import { useContext } from 'react';
+  import MyContext from './MyContext';
+
+  function ChildComponent() {
+    // 'contextValue' is the same as what we pass to the value property of MyContext.Provider! If no provider is found, 'contextValue' is the default value defined in 'createContext'!
+    const contextValue = useContext(MyContext);
+
+    return ...
+  }
+  ```
 
 ## Custom Hooks
 
