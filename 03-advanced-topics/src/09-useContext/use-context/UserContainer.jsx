@@ -2,6 +2,7 @@ import { useContext } from 'react';
 import NavbarContext from './NavbarContext';
 
 const UserContainer = () => {
+  // It is an object with user and logout properties
   const contextValue = useContext(NavbarContext);
 
   return (
