@@ -5,7 +5,7 @@ const peopleReducer = (state, action) => {
         ...state,
         people: [
           ...state.people,
-          { id: action.id, name: state.value }
+          { id: action.id, name: action.name }
         ]
       };
     }

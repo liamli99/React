@@ -17,7 +17,7 @@ const Reducer = () => {
     dispatch({
       type: 'add',
       id: currentId++,
-      // name: value
+      name: state.value
     });
   }
 

@@ -619,46 +619,92 @@ function App() {
 - [Documentation](https://react.dev/learn/passing-data-deeply-with-context)
 - Usually, we pass information from parent component to child component via props. However, if we have to pass the information through many components in the middle, or if many components need the same information, we can use ***context***! Context lets the parent component make some information available to any component in the tree below it!
 
-- 1. Step 1: **Create** a context
-  MyContext.js:
-  ```js
-  import { createContext } from 'react';
+#### Usage
+1. **Create** a context
+MyContext.js:
+```js
+import { createContext } from 'react';
 
-  // The default value is used when there is no matching context provider in the tree above the component that uses the context. If we don’t have any meaningful default value, leave it empty!
-  const MyContext = createContext(defaultValue);
+// The default value is used when there is no matching context provider in the tree above the component that uses the context. If we don’t have any meaningful default value, leave it empty!
+const MyContext = createContext(defaultValue);
 
-  export default MyContext;
-  ```
-  
-  2. Step 2: **Provide** that context from the parent component that specifies the value
-  ParentComponent.jsx:
-  ```js
-  import MyContext from './MyContext';
+export default MyContext;
+```
 
-  function ParentComponent() {
-    return (
-      <MyContext.Provider value={...}>
-      {/* Where we want to use the value */}
-      </MyContext.Provider>
-    );
+2. **Provide** that context from the parent component that specifies the value
+ParentComponent.jsx:
+```js
+import MyContext from './MyContext';
+
+function ParentComponent() {
+  return (
+    <MyContext.Provider value={...}>
+    {/* Where we want to use the value */}
+    </MyContext.Provider>
+  );
+}
+```
+
+3. **Use** that context from the child component that needs the value
+ChildComponent.jsx:
+```js
+import { useContext } from 'react';
+import MyContext from './MyContext';
+
+function ChildComponent() {
+  // 'contextValue' is the same as what we pass to the value property of MyContext.Provider! If no provider is found, 'contextValue' is the default value defined in 'createContext'!
+  const contextValue = useContext(MyContext);
+
+  return ...
+}
+```
+
+#### Alternative Usage: 'Global' Context
+1. AppContext.jsx:
+```js
+import { createContext, useContext } from 'react';
+
+const AppContext = createContext(defaultValue);
+
+// Create a Custom Hook to use the context
+export const useAppContext = () => useContext(AppContext);
+
+// We will wrap App component inside AppProvider component tags in main.jsx! So that all the components will have access to the value!
+export const AppProvider = ({ children }) => {
+  return (
+    <AppContext.Provider value={...}>
+      {children}
+    </AppContext.Provider>
+  );
+}
+```
+
+2. main.jsx:
+```js
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import App from './App.jsx';
+import { AppProvider } from './AppContext.jsx';
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+  <AppProvider>
+    <App />
+  </AppProvider>
+)
+```
+
+3. ChildComponent:
+```js
+import { useAppContext } from './AppContext';
+
+const ChildComponent = () => {
+  // Use the Custom Hook
+  const contextValue = useAppContext();
+  return ...
   }
-  ```
-  
-  3. Step 3: **Use** that context from the child component that needs the value
-  ChildComponent.jsx:
-  ```js
-  import { useContext } from 'react';
-  import MyContext from './MyContext';
+```
 
-  function ChildComponent() {
-    // 'contextValue' is the same as what we pass to the value property of MyContext.Provider! If no provider is found, 'contextValue' is the default value defined in 'createContext'!
-    const contextValue = useContext(MyContext);
-
-    return ...
-  }
-  ```
-
-## `useReducer`
+### `useReducer`
 - [documentation](https://react.dev/learn/extracting-state-logic-into-a-reducer)
 - A component can have many event handlers to update states. We can consolidate all the state update logic outside the component in a single function, called a ***reducer***!
 - Reducer is a different way to handle state! We can migrate from `useState` to `useReducer` in three steps:
@@ -667,7 +713,7 @@ function App() {
   3. Use the reducer from the component, `useReducer` has 2 parameters: reducer function and initial state value, it returns the state variable and dispatch function! 
 
 
-### Rewrite the example in 'Updating Arrays in State' using `useReducer`
+#### Rewrite the example in 'Updating Arrays in State' using `useReducer`
 UseReducerExample.jsx:
 ```js
 import { useReducer } from 'react';
@@ -689,6 +735,7 @@ const UseReducerExample = () => {
     dispatch({
       type: 'add',
       id: currentId++,
+      name: state.value
     });
   }
 
@@ -753,7 +800,7 @@ const peopleReducer = (state, action) => {
         ...state,
         people: [
           ...state.people,
-          { id: action.id, name: state.value }
+          { id: action.id, name: action.name }
         ]
       };
     }
@@ -844,6 +891,11 @@ If we need components to **share data and always update together**, we can first
 - [Documentation](https://fkhadra.github.io/react-toastify/introduction/)
 - `npm install react-toastify`
 - Create notifications with ease
+
+
+
+# Axios
+
 
 
 # Figma

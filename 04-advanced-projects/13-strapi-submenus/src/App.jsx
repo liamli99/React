@@ -1,8 +1,17 @@
 import './App.css';
+import Hero from './Hero';
+import Navbar from './Navbar';
+import Sidebar from './Sidebar';
+import Submenu from './Submenu';
 
 function App() {
   return (
-    <h1>hello</h1>
+    <main>
+      <Navbar />
+      <Hero />
+      <Sidebar />
+      <Submenu />
+    </main>
   );
 }
 

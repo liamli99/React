@@ -1,9 +1,12 @@
-import { createContext, useState } from 'react';
+import { createContext, useContext, useState } from 'react';
 
-const GlobalContext = createContext();
+const AppContext = createContext();
 
-// We will wrap App component inside AppContext component tags in main.jsx! So that all the components will have access to user and logout!
-const AppContext = ({ children }) => {
+// Create a Custom Hook to use the context! 
+export const useAppContext = () => useContext(AppContext);
+
+// We will wrap App component inside AppProvider component tags in main.jsx! So that all the components will have access to user and logout!
+export const AppProvider = ({ children }) => {
   const [user, setUser] = useState({ name: 'Liam' });
 
   const logout = () => {
@@ -11,10 +14,8 @@ const AppContext = ({ children }) => {
   }
 
   return (
-    <GlobalContext.Provider value={{ user, logout }}>
+    <AppContext.Provider value={{ user, logout }}>
       {children}
-    </GlobalContext.Provider>
+    </AppContext.Provider>
   );
 }
-
-export default AppContext;
