@@ -7,7 +7,7 @@ const randomUserUrl = 'https://randomuser.me/api';
 const ConfigDefault = () => {
   const fetchData = async () => {
     // Global axios defaults
-    axios.defaults.headers.common['Authorization'] = 'Bearer 123';
+    axios.defaults.headers['Authorization'] = 'Bearer 1234';
 
     try {
       // Both Request Headers include 'Authorization: Bearer 123'!

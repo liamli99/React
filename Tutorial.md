@@ -914,19 +914,45 @@ If we need components to **share data and always update together**, we can first
 
 - The return value of an Axios request is a Promise. 
   The resolved value is a [response object](https://axios-http.com/docs/res_schema) provided by the server where **200 <= status code < 300**!
-  1. `data` is the response provided by the server
-  2. `status` is the HTTP status code from the response
+  1. `data` is the response provided by the server (res.json)
+  2. `status` is the HTTP status code from the response (res.status)
   The rejected value is an [error object](https://axios-http.com/docs/handling_errors):
-  1. `response` is the response object provided by the server where status code is **out of the range of 2xx**!
+  1. `response` is the response object provided by the server where status code is **outside the range of 2xx**!
 
 - We can create a new [instance of axios](https://axios-http.com/docs/instance) with a custom config: `const instance = axios.create([config])`, this instance is used the same as axios! The instance config we specify when creating the instance will be **merged** with the request config when making the request!
 
 - We can speficy [config defaults](https://axios-http.com/docs/config_defaults) that will be applied to every request:
-  1. Global axios defaults: **Apply to all requests unless overridden by instance config**
-  `axios.defaults.headers.common['Authorization'] = AUTH_TOKEN`
-  2. Custom instance defaults: **Apply to this specific instance**
-   
+  1. Global axios defaults: **Apply to all requests unless overridden by instances**
+  e.g.: `axios.defaults.headers['Authorization'] = AUTH_TOKEN`
+  1. Custom instance defaults: **Apply to this specific instance**
+  e.g.: `instance.defaults.headers['Authorization'] = AUTH_TOKEN`
 
+- We can [intercept](https://axios-http.com/docs/interceptors) requests or responses **before** they are handled:
+  1. Request Interceptor:
+  ```js
+  // Add a request interceptor
+  axios.interceptors.request.use((config) => {
+    // Do something (with config object) before request is sent
+    return config;
+  }, (error) => {
+    // Do something (with request error)
+    return Promise.reject(error);
+  });
+  ```
+
+  2. Response Interceptor:
+  ```js
+  // Add a response interceptor
+  axios.interceptors.response.use((response) => {
+    // Executed when 200 <= status code < 300
+    // Do something (with response object) before response is received
+    return response;
+  }, (error) => {
+    // Executed when status code is outside the range of 2xx
+    // Do something (with error object) before response is received
+    return Promise.reject(error);
+  });
+  ```
 
 
 # Figma

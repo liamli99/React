@@ -1,9 +1,9 @@
 import './App.css';
-import ConfigDefault from './examples/5-config-default';
+import Interceptors from './examples/6-interceptors';
 
 const App = () => {
   return (
-    <ConfigDefault />
+    <Interceptors />
   );
 }
 
