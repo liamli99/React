@@ -895,6 +895,37 @@ If we need components to **share data and always update together**, we can first
 
 
 # Axios
+- [Documentation](https://axios-http.com/docs/intro)
+- `npm install axios` | `import axios from 'axios'`
+
+- The user can send a request to the server with `axios(config)`, `config` is an [object](https://axios-http.com/docs/req_config):
+  1. `url` is the server URL (absolute or relative), it is the only required property for request config!
+  2. `method` is the request method, the default value is 'get'!
+  3. `data` is the data to be sent as the request body! We only use it in 'post', 'put', and 'patch' methods!
+  4. `headers` are custom headers to be sent! e.g. `{ headers: { 'Authorization': 'Bearer <token>', 'Content-Type': 'application/json' } }`
+  5. `baseURL` will be prepended to `url` unless `url` is absolute!
+
+- We can also write method, url, and data outside of config:
+  1. `axios.get(url[, config])`
+  2. `axios.delete(url[, config])`
+  3. `axios.post(url[, data[, config]])`
+  4. `axios.put(url[, data[, config]])`
+  5. `axios.patch(url[, data[, config]])`
+
+- The return value of an Axios request is a Promise. 
+  The resolved value is a [response object](https://axios-http.com/docs/res_schema) provided by the server where **200 <= status code < 300**!
+  1. `data` is the response provided by the server
+  2. `status` is the HTTP status code from the response
+  The rejected value is an [error object](https://axios-http.com/docs/handling_errors):
+  1. `response` is the response object provided by the server where status code is **out of the range of 2xx**!
+
+- We can create a new [instance of axios](https://axios-http.com/docs/instance) with a custom config: `const instance = axios.create([config])`, this instance is used the same as axios! The instance config we specify when creating the instance will be **merged** with the request config when making the request!
+
+- We can speficy [config defaults](https://axios-http.com/docs/config_defaults) that will be applied to every request:
+  1. Global axios defaults: **Apply to all requests unless overridden by instance config**
+  `axios.defaults.headers.common['Authorization'] = AUTH_TOKEN`
+  2. Custom instance defaults: **Apply to this specific instance**
+   
 
 
 
