@@ -3,7 +3,7 @@
 - [Documentation](https://react.dev/reference/react)
 - [React Developer Tools](https://chromewebstore.google.com/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi?utm_source=ext_app_menu)
 
-## Create React applications
+## Create React Applications
 ### Create React App
 - [Documentation](https://create-react-app.dev/docs/getting-started)
 - Create a new project: `npx create-react-app my-app` -> `cd my-app` -> `npm start`
@@ -701,7 +701,7 @@ const ChildComponent = () => {
   // Use the Custom Hook
   const contextValue = useAppContext();
   return ...
-  }
+}
 ```
 
 ### `useReducer`
@@ -913,18 +913,19 @@ If we need components to **share data and always update together**, we can first
   5. `axios.patch(url[, data[, config]])`
 
 - The return value of an Axios request is a Promise. 
-  The resolved value is a [response object](https://axios-http.com/docs/res_schema) provided by the server where **200 <= status code < 300**!
-  1. `data` is the response provided by the server (res.json)
+  The resolved value is a [response object](https://axios-http.com/docs/res_schema) where **200 <= status code < 300**!
+  1. `data` is the response provided by the server (res.send/res.json)
   2. `status` is the HTTP status code from the response (res.status)
-  The rejected value is an [error object](https://axios-http.com/docs/handling_errors):
-  1. `response` is the response object provided by the server where status code is **outside the range of 2xx**!
+  The rejected value is an [error object](https://axios-http.com/docs/handling_errors) where status code is **outside the range of 2xx**!
+  1. `response` is the response object, see above!
+  2. `message` is the error message provided by axios
 
 - We can create a new [instance of axios](https://axios-http.com/docs/instance) with a custom config: `const instance = axios.create([config])`, this instance is used the same as axios! The instance config we specify when creating the instance will be **merged** with the request config when making the request!
 
 - We can speficy [config defaults](https://axios-http.com/docs/config_defaults) that will be applied to every request:
   1. Global axios defaults: **Apply to all requests unless overridden by instances**
   e.g.: `axios.defaults.headers['Authorization'] = AUTH_TOKEN`
-  1. Custom instance defaults: **Apply to this specific instance**
+  2. Custom instance defaults: **Apply to this specific instance**
   e.g.: `instance.defaults.headers['Authorization'] = AUTH_TOKEN`
 
 - We can [intercept](https://axios-http.com/docs/interceptors) requests or responses **before** they are handled:
@@ -954,6 +955,59 @@ If we need components to **share data and always update together**, we can first
   });
   ```
 
+# React Query
+- [Documentation](https://tanstack.com/query/latest/docs/framework/react/overview)
+- `npm install @tanstack/react-query`
+- It is a state management library that simplifies the process of fetching, caching, synchronizing, and updating server state! It is always used together with axios or fetch!
+
+## `useQuery`: GET
+- [Documentation](https://tanstack.com/query/latest/docs/framework/react/reference/useQuery)
+- Parameters: 
+  1. [queryKey](https://tanstack.com/query/latest/docs/framework/react/guides/query-keys): Query Keys are used to identify and manage queries, they have to be an Array at the top level and can be as simple as an Array with a single string.
+  2. [queryFn](https://tanstack.com/query/latest/docs/framework/react/guides/query-functions): Query Functions can be any functions that return a Promise! The Promise should either resolve or reject/throw an error! The parameter is [QueryFunctionContext](https://tanstack.com/query/latest/docs/framework/react/guides/query-functions#queryfunctioncontext)! 
+- Returns:
+  1. `data`: the resolved value of the returned Promise of the query function
+  2. `error`: the rejected value/thrown error of the returned Promise of the query function
+
+## `useMutation`: POST, DELETE, PUT/PATCH
+- [Documentation](https://tanstack.com/query/latest/docs/framework/react/reference/useMutation)
+- Parameters:
+  1. `mutationFn`: Similar to `queryFn`, but the parameter is any variable! **If there are multiple parameters, we should combine them into an object!**
+  2. `onError`: This function will be executed when mutation encounters an error
+  3. `onSuccess`: This function will be executed when mutation is successful
+- Returns:
+  1. `mutate`: Different from `useQuery`, `useMutation` does not execute automatically. Instead, we need to use `mutate` to call `mutationFn` to perform the mutation! We always use destructuring assignment to rename mutate to avoid confusion among POST, DELETE, and PUT/PATCH!
+  2. `data`: the resolved value of the returned Promise of the mutation function
+  3. `error`: the rejected value/thrown error of the returned Promise of the mutation function
+
+## Usage:
+1. main.jsx
+```js
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import App from './App.jsx';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+
+const queryClient = new QueryClient();
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+  <QueryClientProvider client={queryClient}>
+    <App />
+  </QueryClientProvider>
+)
+``` 
+
+2. ChildComponent.jsx
+```js
+import { useQuery } from '@tanstack/react-query';
+
+const ChildComponent = () => {
+  const { data, error, isPending, isError } = useQuery({
+    queryKey: 
+    queryFn:
+  });
+}
+```
 
 # Figma
 

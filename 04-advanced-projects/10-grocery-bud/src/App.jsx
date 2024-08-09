@@ -7,6 +7,7 @@ import Form from './Form';
 import Items from './Items';
 
 // Since there is no database, we can use localStorage to store data in the browser!
+// Right Click -> Inspect -> Application -> Local storage!
 // Save to local storage
 const setLocalStorage = (items) => {
   localStorage.setItem('items', JSON.stringify(items));
