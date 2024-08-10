@@ -1,8 +1,13 @@
-import './App.css'
+import './App.css';
+import Carousel from './Carousel';
+import SlickCarousel from './SlickCarousel';
 
 function App() {
   return (
-    <h1>hello</h1>
+    <main>
+      {/* <Carousel /> */}
+      <SlickCarousel />
+    </main>
   );
 }
 
