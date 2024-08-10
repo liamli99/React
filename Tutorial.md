@@ -11,7 +11,6 @@
 - Upload to GitHub: Make sure to remove `node_modules` folder and `package-lock.json` file
 - Clone from GitHub: `npm install` -> `npm start`
 
-
 ### Vite (Recommended!)
 - [Documentation](https://vitejs.dev/guide/)
 - Create a new project: `npm create vite@latest my-app -- --template react` -> `cd my-app` -> `npm install` -> `npm run dev`
@@ -19,6 +18,27 @@
 - Component files (return HTML-like markup) must use `.jsx` extension!
 - Upload to GitHub: Make sure to remove `node_modules` folder and `package-lock.json` file
 - Clone from GitHub: `npm install` -> `npm run dev`
+
+
+## Deployment
+### GitHub pages
+- [Tutorial](https://www.linkedin.com/pulse/deploy-your-react-app-using-github-pages-hasibul-islam/)
+- Note that after installing gh-pages and editing package.json, we should push all the changes to repo! Then we run `npm run deploy` and we are all set! If we change the project, we should push all the changes to repo and then run `npm run deploy` again to deploy the project with latest changes!
+
+### Netlify
+1. Make sure the project has no warnings because Netlify treats warnings as errors!
+2. 
+  - `npm run build` - this can create a `build` folder (Creat React App) or a `dist` folder (Vite)!
+  - Sites -> Add new site -> Deploy manually -> choose that folder
+  **OR**
+  - Sites -> Add new site -> Import an existing project -> GitHub -> choose a repo -> Build command: `npm run build`, Publish directory: `build` (Create React App) or `dist` (Vite) -> Add Environment Variables if any
+  - Benefit: every time we push changes to GitHub, Netlify will automatically rebuild our project!
+
+
+## Environment Variables
+- ***We don't have to install `dotenv` to access environment variables!!!***
+- 1. Create a `.env` file in the **root** of the project to store environment variables and their values. Don't forget to include `.env` in `.gitignore`! If we use Create React App, the variable name must start with `REACT_APP_`; If we use Vite, the variable name must start with `VITE_`!
+  2. If we use Creat React App, use `process.env.REACT_APP_VARIABLE` to access the value; If we use Vite, use `import.meta.env.VITE_VARIABLE` to accesss the value!
 
 
 ## Theories
@@ -659,14 +679,14 @@ function ChildComponent() {
 }
 ```
 
-#### Alternative Usage: 'Global' Context
+#### Alternative Usage: Global Context
 1. AppContext.jsx:
 ```js
 import { createContext, useContext } from 'react';
 
 const AppContext = createContext(defaultValue);
 
-// Create a Custom Hook to use the context
+// Create a Custom Hook to use the context, the return value of useAppContext() is the same as what we pass to the value property of AppContext.Provider!
 export const useAppContext = () => useContext(AppContext);
 
 // We will wrap App component inside AppProvider component tags in main.jsx! So that all the components will have access to the value!
@@ -843,7 +863,7 @@ export default peopleReducer;
 
 ## Custom Hooks
 - [Documentation](https://react.dev/learn/reusing-logic-with-custom-hooks)
-- Custom Hook is just a JavaScript function that lets us share logic between components, it wraps reusable code and returns what we need! It is very straightforward to use!
+- Custom Hook is just a JavaScript function that lets us share stateful logic between components, it wraps reusable code and returns what we need! It is very straightforward to use!
 - Same as other Hooks, Custom Hooks must be named starting with `use` followed by a capital letter
 
 
@@ -851,19 +871,6 @@ export default peopleReducer;
 
 ### Sharing data between components
 If we need components to **share data and always update together**, we can first **move the state up** from the child components into the closest parent component containing all of them, and then **pass the state down** as props!
-
-## Deployment
-### GitHub pages
-- [Tutorial](https://www.linkedin.com/pulse/deploy-your-react-app-using-github-pages-hasibul-islam/)
-- Note that after installing gh-pages and editing package.json, we should push all the changes to repo! Then we run `npm run deploy` and we are all set! If we change the project, we should push all the changes to repo and then run `npm run deploy` again to deploy the project with latest changes!
-
-### Netlify
-1. Make sure the project has no warnings because Netlify treats warnings as errors!
-2. 
-  - `npm run build` - this can create a build folder
-  - Sites -> Add new site -> Deploy manually -> choose build folder
-  **OR**
-  - Sites -> Add new site -> Import an existing project -> GitHub -> choose a repo -> Build command: `npm run build`, Publish directory: `build` (Benefit: every time we push changes to GitHub, Netlify will automatically rebuild our project!)
 
 
 # Useful npm Packages
@@ -955,6 +962,7 @@ If we need components to **share data and always update together**, we can first
   });
   ```
 
+
 # React Query
 - [Documentation](https://tanstack.com/query/latest/docs/framework/react/overview)
 - `npm install @tanstack/react-query`
@@ -963,7 +971,7 @@ If we need components to **share data and always update together**, we can first
 ## `useQuery`: GET
 - [Documentation](https://tanstack.com/query/latest/docs/framework/react/reference/useQuery)
 - Parameters: 
-  1. [queryKey](https://tanstack.com/query/latest/docs/framework/react/guides/query-keys): Query Keys are used to identify and manage queries, they have to be an Array at the top level and can be as simple as an Array with a single string.
+  1. [queryKey](https://tanstack.com/query/latest/docs/framework/react/guides/query-keys): Query Keys are used to identify and manage queries, they have to be an Array at the top level and can be as simple as an Array with a single string. Note that **if queryFn has any variables, we should include them in the queryKey so that each time variables change, query will be refetched automatically!**
   2. [queryFn](https://tanstack.com/query/latest/docs/framework/react/guides/query-functions): Query Functions can be any functions that return a Promise! The Promise should either resolve or reject/throw an error! The parameter is [QueryFunctionContext](https://tanstack.com/query/latest/docs/framework/react/guides/query-functions#queryfunctioncontext)! 
 - Returns:
   1. `data`: the resolved value of the returned Promise of the query function
@@ -972,16 +980,16 @@ If we need components to **share data and always update together**, we can first
 ## `useMutation`: POST, DELETE, PUT/PATCH
 - [Documentation](https://tanstack.com/query/latest/docs/framework/react/reference/useMutation)
 - Parameters:
-  1. `mutationFn`: Similar to `queryFn`, but the parameter is any variable! **If there are multiple parameters, we should combine them into an object!**
-  2. `onError`: This function will be executed when mutation encounters an error
-  3. `onSuccess`: This function will be executed when mutation is successful
+  1. `mutationFn`: Similar to `queryFn`, but the parameter can be any value! **If there are multiple parameters, we should combine them into an object!**
+  2. `onError`: This function will be executed when mutation encounters an error, the first argument it provides is `error` which is the rejected value/thrown error of the returned Promise of the mutation function!
+  3. `onSuccess`: This function will be executed when mutation is successful, the first argument it provides is `data` which is the resolved value of the returned Promise of the mutation function!
 - Returns:
-  1. `mutate`: Different from `useQuery`, `useMutation` does not execute automatically. Instead, we need to use `mutate` to call `mutationFn` to perform the mutation! We always use destructuring assignment to rename mutate to avoid confusion among POST, DELETE, and PUT/PATCH!
+  1. `mutate`: **Different from `useQuery`, `useMutation` does not execute automatically. Instead, we need to use `mutate` to call `mutationFn` to perform the mutation!** We always use destructuring assignment to rename mutate to avoid confusion among POST, DELETE, and PUT/PATCH!
   2. `data`: the resolved value of the returned Promise of the mutation function
   3. `error`: the rejected value/thrown error of the returned Promise of the mutation function
 
 ## Usage:
-1. main.jsx
+1. main.jsx, similar to Global Context!
 ```js
 import React from 'react';
 import ReactDOM from 'react-dom/client';
@@ -997,17 +1005,77 @@ ReactDOM.createRoot(document.getElementById('root')).render(
 )
 ``` 
 
-2. ChildComponent.jsx
+2. reactQueryCustomHooks.js
 ```js
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import axios from 'axios';
 
-const ChildComponent = () => {
-  const { data, error, isPending, isError } = useQuery({
-    queryKey: 
-    queryFn:
+// For GET request, we can directly use this custom hook to fetch data because useQuery executes automatically!
+export const useGetTasks = () => {
+  const { data, error, isPending, isError, ... } = useQuery({
+    // If queryFn has any variables, include them in the queryKey!!! So that each time variables change, query will be refetched automatically!
+    queryKey: ['tasks'],
+    queryFn: () => axios.get('/api/tasks')
   });
+
+  // This data is the resolved value of the returned Promise of the query function
+  // This error is the rejected value/thrown error of the returned Promise of the query function
+  return { data, error, isPending, isError, ... };
+}
+
+// For POST, PUT/PATCH, DELETE requests, after importing custom hooks, we must use the mutate function to manually create, update, and delete data because useMutation doesn't execute automatically!
+
+export const useCreateTask = () => {
+  const queryClient = useQueryClient();
+
+  const { mutate: createTask, ... } = useMutation({
+    mutationFn: (taskData) => axios.post('/api/tasks', taskData),
+    
+    // This function will be executed when mutation encounters an error
+    // This error is the rejected value/thrown error of the returned Promise of the mutation function
+    onError: (error) => console.log(error.response),
+    // This function will be executed when mutation is successful
+    // This data is the resolved value of the returned Promise of the mutation function
+    onSuccess: (data) => {
+      // Refetch query whose query key is ['tasks']!!!
+      queryClient.invalidateQueries({ queryKey: ['tasks'] });
+    }
+  });
+
+  return { createTask, ... };
+}
+
+export const useUpdateTask = () => {
+  const queryClient = useQueryClient();
+
+  const { mutate: updateTask, ... } = useMutation({
+    mutationFn: ({ id, taskData }) => axios.patch(`/api/tasks/${id}`, taskData),
+    
+    onError: (error) => console.log(error.response),
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ['tasks'] });
+    }
+  });
+
+  return { updateTask, ... };
+}
+
+export const useDeleteTask = () => {
+  const queryClient = useQueryClient();
+
+  const { mutate: deleteTask, ... } = useMutation({
+    mutationFn: (id) => axios.delete(`/api/tasks/${id}`),
+    
+    onError: (error) => console.log(error.response),
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ['tasks'] });
+    }
+  });
+
+  return { deleteTask, ... };
 }
 ```
+
 
 # Figma
 

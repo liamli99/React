@@ -4,6 +4,8 @@ import { useGetTasks } from './reactQueryCustomHooks';
 const Items = () => {
   const { data, error, isPending, isError } = useGetTasks();
 
+  // console.log(data);
+
   if (isPending) {
     return <p style={{ marginTop: '1rem' }}>Loading...</p>
   }
