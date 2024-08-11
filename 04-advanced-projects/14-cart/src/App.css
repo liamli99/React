@@ -251,6 +251,7 @@ ul {
   margin: 0 auto;
   margin-top: 1rem;
 }
+
 /* ============= PROJECT CSS =============== */
 
 /*
@@ -266,6 +267,7 @@ nav {
   justify-content: center;
   align-items: center;
 }
+
 .nav-center {
   width: var(--view-width);
   max-width: var(--fixed-width);
@@ -273,17 +275,21 @@ nav {
   justify-content: space-between;
   align-items: center;
 }
+
 nav h4 {
   color: var(--white);
 }
+
 .nav-container {
   display: block;
   position: relative;
 }
+
 .cart-icon {
   font-size: 2.25rem;
   color: var(--white);
 }
+
 .amount-container {
   position: absolute;
   top: -0.85rem;
@@ -296,15 +302,18 @@ nav h4 {
   align-items: center;
   justify-content: center;
 }
+
 .total-amount {
   color: var(--white);
   font-size: 1.25rem;
 }
+
 /*
 =============== 
 Cart
 ===============
 */
+
 .cart {
   min-height: calc(100vh - 5rem);
   width: var(--view-width);
@@ -313,33 +322,39 @@ Cart
   margin-top: 40px;
   padding: 2.5rem 0;
 }
+
 .cart h2 {
   text-transform: uppercase;
   text-align: center;
   margin-bottom: 3rem;
 }
+
 .empty-cart {
   text-transform: lowercase;
   color: var(--grey-500);
   margin-top: 1rem;
   text-align: center;
 }
+
 hr {
   background: var(--grey-300);
   border-color: transparent;
   margin-bottom: 1rem;
   border-width: 1px;
 }
+
 .cart footer {
   margin-top: 5rem;
   text-align: center;
 }
+
 .cart-total {
   text-transform: capitalize;
   display: flex;
   justify-content: space-between;
   margin-bottom: 1rem;
 }
+
 .cart-total span {
   background: var(--primary-500);
   display: inline-block;
@@ -347,11 +362,13 @@ hr {
   border-radius: var(--borderRadius);
   color: var(--white);
 }
+
 /*
 =============== 
 Cart Item
 ===============
 */
+
 .cart-item {
   display: grid;
   align-items: center;
@@ -365,6 +382,7 @@ Cart Item
   height: 5rem;
   object-fit: cover;
 }
+
 .cart-item h5 {
   margin-bottom: 0.5rem;
   font-weight: 500;
@@ -376,6 +394,7 @@ Cart Item
   color: var(--grey-500);
   display: block;
 }
+
 .remove-btn {
   color: var(--primary-500);
   letter-spacing: var(--letterSpacing);
@@ -389,12 +408,14 @@ Cart Item
 .remove-btn:hover {
   color: var(--primary-600);
 }
+
 .amount-btn {
   width: 1.5rem;
   background: transparent;
   border-color: transparent;
   cursor: pointer;
 }
+
 .amount-icon {
   font-size: 1.25rem;
   color: var(--primary-500);
@@ -403,6 +424,7 @@ Cart Item
 .amount-icon:hover {
   color: var(--primary-700);
 }
+
 .amount {
   font-size: 1.25rem;
   display: block;
