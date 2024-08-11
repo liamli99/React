@@ -460,7 +460,7 @@ function MyButton() {
 ```
 
 #### Updating Objects in State
-- In React, state can hold any JavaScript value. If state is an object, although it is technically mutable, we should treat it **as if it is immutable** (like numbers, strings, and booleans)! So that the setter function should **replace** it with a new object instead of mutating it!!!
+- In React, state can hold any JavaScript value. If state is an object, although it is technically mutable, we should treat it **as if it is immutable** (like numbers, strings, and booleans)! As a result, we **should not mutate state**, in order to update the state, we should use the setter function to **replace** it with a new object!!!
 - If we want to include existing data as part of the new object, then we can use spread syntax and only incude property values that we want to override!
 - [Update a nested object](https://react.dev/learn/updating-objects-in-state#updating-a-nested-object)
 - [Write concise update logic with Immer - Optional](https://react.dev/learn/updating-objects-in-state#write-concise-update-logic-with-immer)
@@ -505,11 +505,11 @@ const UseStateObject = () => {
 ```
 
 #### Updating Arrays in State
-- Since array is another kind of object in JavaScript, if state is an array, we should treat it as if it is immutable! So that the setter function should **replace** it with a new array instead of mutating it!!!
+- Since array is another kind of object in JavaScript, if state is an array, we should treat it as if it is immutable! As a result, we **should not mutate state**, in order to update the state, we should use the setter function to **replace** it with a new array!!!
 - 1. Add: spread syntax
-  2. Remove: `filter`
-  3. Change: `map`
-  4. Other changes like reverse or sort: Copy the array first and then make changes!
+  1. Remove: `filter`
+  2. Change: `map`
+  3. Other changes like reverse or sort: Copy the array first and then make changes!
 - [Write concise update logic with Immer - Optional](https://react.dev/learn/updating-arrays-in-state#write-concise-update-logic-with-immer)
 
 ```js
@@ -704,6 +704,7 @@ export const AppProvider = ({ children }) => {
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App.jsx';
+
 import { AppProvider } from './AppContext.jsx';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
@@ -730,7 +731,7 @@ const ChildComponent = () => {
 - Reducer is a different way to handle state! We can migrate from `useState` to `useReducer` in three steps:
   1. Move from setting state to dispatching action object, the action object must include 'type' property and may include additional properties!
   2. Write a reducer function, it has 2 parameters: state variable and action object, it returns the **next state value** (what we originally pass to the state setter function)!
-  3. Use the reducer from the component, `useReducer` has 2 parameters: reducer function and initial state value, it returns the state variable and dispatch function! 
+  3. Use the reducer from the component, `useReducer` has 2 parameters: reducer function and initial state value, it returns the state variable and dispatch function! **If there are multiple state variables, then we can create a state object and each property is a state variable!**
 
 
 #### Rewrite the example in 'Updating Arrays in State' using `useReducer`
@@ -744,6 +745,7 @@ let currentId = 0;
 const UseReducerExample = () => {
   // const [value, setValue] = useState('');
   // const [people, setPeople] = useState([]);
+  // 'state' is an object which has 2 properties: value and people. Each property is a state variable!
   const [state, dispatch] = useReducer(peopleReducer, { value: '', people: [] });
 
   const addItem = () => {
@@ -816,6 +818,7 @@ peopleReducer.js:
 const peopleReducer = (state, action) => {
   switch (action.type) {
     case 'add': {
+      // Return the next state value!
       return {
         ...state,
         people: [
@@ -889,6 +892,11 @@ If we need components to **share data and always update together**, we can first
 - `npm install nanoid`
 - Create a tiny, secure, unique string ID, normally used as a unique key prop for each child in a list!
 
+## `react-slick`
+- [Documentation](https://react-slick.neostack.com/docs/get-started)
+- `npm install react-slick slick-carousel`
+- Create carousel with ease
+
 ## `values.js`
 - [Documentation](https://www.npmjs.com/package/values.js)
 - `npm install values.js`
@@ -898,7 +906,6 @@ If we need components to **share data and always update together**, we can first
 - [Documentation](https://fkhadra.github.io/react-toastify/introduction/)
 - `npm install react-toastify`
 - Create notifications with ease
-
 
 
 # Axios
@@ -994,6 +1001,7 @@ If we need components to **share data and always update together**, we can first
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App.jsx';
+
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 const queryClient = new QueryClient();
@@ -1076,6 +1084,67 @@ export const useDeleteTask = () => {
 }
 ```
 
+
+# React Router
+- [Documentation](https://reactrouter.com/en/main)
+- `npm install react-router-dom`
+
+## [Route](https://reactrouter.com/en/main/route/route)
+- Route is an object:
+  1. `path`: url
+  2. `element`: the React Component to render
+  3. `children`: An array of Route objects. Don't forget to include `<Outlet />` in parent route element to render its child route elements **at this exact position!** The `<Outlet />` dynamically renders the child route element whose path is matched! We can also set an `Index Route` as a default child route which will render when its parent route path is matched! Note that all child route elements **share** the code of their parent! 
+  
+
+- `createBrowserRouter`:
+  - [Documentation](https://reactrouter.com/en/main/routers/create-browser-router)
+  - Parameters: 
+    1. An array of Route objects
+
+    
+    2. opts
+
+- Navigate between routes:
+  1. `<Link to='...'></Link>`: It is used as HTML `<a href>` tag to navigate to another route!
+  2. `<NavLink to='...'></NavLink>`: It is a special kind of `<Link>` that knows whether it is active, pending, or transitioning!
+
+
+## Usage
+main.jsx, similar to React Query and Global Context!
+```js
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import App from './App.jsx';
+
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+
+const router = createBrowserRouter([{
+  path: '/',
+  element: <App />,
+  children: [
+    {
+      // Index Route! Don't write `path: '/'` because it can lead to confusion and unexpected behavior!
+      index: true,
+
+    },
+    {
+      // This is relative to its parent path: '/about'
+      path: 'about',
+
+    }
+  ]
+}]);
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+  <RouterProvider router={router} />
+)
+```
+
+```js
+import { Link } from 'react-router-dom';
+
+
+```
 
 # Figma
 
