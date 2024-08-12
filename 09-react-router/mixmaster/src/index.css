@@ -276,9 +276,212 @@ ul {
 
 /* ============= PROJECT CSS ============= */
 
+/* Navbar */
+
+nav {
+  background: var(--white);
+}
+
+.nav-center {
+  width: var(--view-width);
+  max-width: var(--max-width);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem 2rem;
+}
+
+.logo {
+  font-size: clamp(1.5rem, 3vw, 3rem);
+  color: var(--primary-500);
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+.nav-links {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.nav-link {
+  color: var(--grey-900);
+  padding: 0.5rem 0.5rem 0.5rem 0;
+  transition: var(--transition);
+  letter-spacing: 2px;
+}
+.nav-link:hover {
+  color: var(--primary-500);
+}
+
+/* In Navbar.jsx, we use <NavLink> to navigate between routes! <NavLink> knows whether the link is active or not! When it is active (the value of the 'to' attribute matches the current url), an active class is added to it! */
+.active {
+  color: var(--primary-500);
+}
+
+@media (min-width: 768px) {
+  .nav-center {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .nav-links {
+    flex-direction: row;
+    margin-top: 0;
+  }
+}
+
+/* Outlet */
+
 .page {
   width: var(--view-width);
   max-width: var(--max-width);
   margin: 0 auto;
   padding: 5rem 2rem;
 }
+
+/* About */
+
+.about {
+  line-height: 2;
+  color: var(--grey-500);
+  margin-top: 2rem;
+}
+
+/* Error */
+
+.error-container {
+  min-height: 100vh;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.error-container img {
+  width: 90vw;
+  max-width: 600px;
+  margin-bottom: 2rem;
+  margin-top: -3rem;
+}
+
+.error-container h3 {
+  margin-bottom: 0.5rem;
+}
+
+.error-container p {
+  line-height: 1.5;
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+  color: var(--grey-500);
+}
+
+/* <Link> */
+.error-container a {
+  color: var(--primary-500);
+  text-transform: capitalize;
+}
+
+/* Cocktail List */
+
+.cocktail-list-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+/* Cocktail Single */
+
+.cocktail-container {
+  background: var(--white);
+  box-shadow: var(--shadow-2);
+  transition: var(--transition);
+  display: grid;
+  grid-template-rows: auto 1fr;
+  border-radius: var(--borderRadius);
+}
+
+.cocktail-container:hover {
+  box-shadow: var(--shadow-4);
+}
+
+.cocktail-container img {
+  height: 15rem;
+  border-top-left-radius: var(--borderRadius);
+  border-top-right-radius: var(--borderRadius);
+}
+
+.cocktail-container .footer {
+  padding: 1.5rem;
+  
+  h4,
+  h5 {
+    margin-bottom: 0.5rem;
+  }
+  
+  h4 {
+    font-weight: 700;
+  }
+  
+  p {
+    margin-bottom: 1rem;
+    color: var(--grey-500);
+  }
+}
+
+/* Cocktail */
+
+.cocktail header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.cocktail .btn {
+  margin-bottom: 1rem;
+}
+
+.cocktail .img {
+  border-radius: var(--borderRadius);
+}
+
+.drink-info {
+  padding-top: 2rem;
+}
+
+.drink p {
+  font-weight: 700;
+  text-transform: capitalize;
+  line-height: 2;
+  margin-bottom: 1rem;
+}
+
+.drink-data {
+  margin-right: 0.5rem;
+  background: var(--primary-300);
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--borderRadius);
+  color: var(--primary-700);
+  letter-spacing: var(--letterSpacing);
+}
+
+.ing {
+  display: inline-block;
+  margin-right: 0.5rem;
+}
+
+@media (min-width: 992px) {
+  .drink {
+    display: grid;
+    grid-template-columns: 2fr 3fr;
+    gap: 3rem;
+    align-items: center;
+  }
+
+  .drink-info {
+    padding-top: 0;
+  }
+}
+
