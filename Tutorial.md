@@ -245,7 +245,7 @@ return (
 
 ```js
 function MyButton() {
-    // A <form> submit event (onSubmit), which happens when a button inside of it is clicked, will reload the whole page by default. We should prevent this unwanted default behaivor!
+    // A <form>'s submit event (onSubmit), which happens when a button inside of it is clicked or a text input is pressed Enter, will reload the whole page by default. We should prevent this unwanted default behaivor!
     function handleSubmit(e) {
         e.stopDefault();
     }
@@ -357,12 +357,15 @@ We often use the `children` prop for visual wrappers: panels, grids, etc.
   - Usage is similar to text input! We can set `value`  attribute to a state variable to make the select box controlled! If we set `value`, we have to add `onChange`!
   - We need to include a list of `<option>`s inside `<select>`!
 
-
 - `FormData` API
   - We can use `FormData` API to handle multiple inputs!
   - By using `FormData`, we don't need to make input controlled! It means that we don't need to set `value`/`checked` attribute and `onChange` event handler. We can set `defaultValue` or `defaultChecked` to specify the initial value
   - We must include `name` attribute because it is used as a key in form data!!! 
 
+- `form` 
+  - We don't use form's `action` and `method` properties to handle HTTP request, because we will use `axios`!
+  - [Validation](https://developer.mozilla.org/en-US/docs/Learn/Forms/Form_validation)
+  
 ### Controlled Inputs
 ```js
 import { useState } from "react";
@@ -610,7 +613,7 @@ function UseRef() {
 - If we want to synchronize the component with some external systems, we should use ***Effects***. Effects are side effects that are caused by rendering itself!
 - By default, Effects run after every render (initial render and re-render)!
 - `useEffect` Hook takes 2 parameters: (1) Setup function, it optionally returns a cleanup function (2) Dependencies (optional). To prevent lint errors, we can't choose dependencies, they are actually determined by the Effect's code!!!
-- [You Might Not Need an Effect](https://react.dev/learn/you-might-not-need-an-effect)
+- [You Might Not Need an Effect](https://react.dev/learn/you-might-not-need-an-effect), try to avoid using this Hook!
 
 #### Usage
 ```js
@@ -973,7 +976,7 @@ If we need components to **share data and always update together**, we can first
 # React Query
 - [Documentation](https://tanstack.com/query/latest/docs/framework/react/overview)
 - `npm install @tanstack/react-query`
-- It is a state management library that simplifies the process of fetching, caching, synchronizing, and updating server state! It is always used together with axios or fetch!
+- It is a state management library that simplifies the process of fetching, caching, synchronizing, and updating server state! It is always **used together with axios** or fetch!
 
 ## `useQuery`: GET
 - [Documentation](https://tanstack.com/query/latest/docs/framework/react/reference/useQuery)
@@ -1019,6 +1022,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 
 // For GET request, we can directly use this custom hook to fetch data because useQuery executes automatically!
+// There is no need to use useEffect!
 export const useGetTasks = () => {
   const { data, error, isPending, isError, ... } = useQuery({
     // If queryFn has any variables, include them in the queryKey!!! So that each time variables change, query will be refetched automatically!
@@ -1091,22 +1095,56 @@ export const useDeleteTask = () => {
 
 ## [Route](https://reactrouter.com/en/main/route/route)
 - Route is an object:
-  1. `path`: url
-  2. `element`: the React Component to render
-  3. `children`: An array of Route objects. Don't forget to include `<Outlet />` in parent route element to render its child route elements **at this exact position!** The `<Outlet />` dynamically renders the child route element whose path is matched! We can also set an `Index Route` as a default child route which will render when its parent route path is matched! Note that all child route elements **share** the code of their parent! 
+  - `path`:
+    - When the route path matches the current url, the route element will be rendered. 
+    - It can include dynamic segments that start with `:`! e.g. '/user/:userId' can match urls like '/user/123' or '/user/abc'! The loader function will have an argument `{ params }` where `params` is an object whose property is the dynamic segment after `:`! e.g. If path is '/user/:userId', then we can use 'params.userId' to access the exact value!
+    - Child route path should not start with `/` and is relative to its parent!!!
   
+  - `element`: the React Component to render
+  
+  - `errorElement`: the React Component to render when there is an error!
+    -  When a route doesn't have an `errorElement`, errors will bubble up, so that we should at least have a root-level `errorElement`! 
+    -  We can use `useRouteError()` to access the error object!
+    -  While `errorElement` handles unexpected errors, we can also throw error response manually!
+  
+  - `children`: an array of Route objects. 
+    - We should include `<Outlet />` in parent route element to render its child route elements **at this exact position!** 
+    - The `<Outlet />` dynamically renders the child route element whose path is matched! 
+    - We can also set an `Index Route` as a default child route which will render when its parent route path is matched! 
+    - Note that all child route elements **share** the code of their parent! 
+  
+  - `loader`: a function to fetch data! 
+    - Loader is called **before** route element renders! 
+    - Loader must return sth and we can use `useLoaderData()` in the route element to access whatever it returns! Normally it returns the fetched data.
+    - Loader function may have argument `{ params }` if route path has dynamic segments! 
+    - Loader function may have argument `{ request }` if route receives Fetch Request!
+  
+  - `action`: a function to create, delete, and update data! 
+    - Action is called **after** the app sends a **non-get** (method is post, delete, put/patch) submission (when `Form`'s submit event is triggered or use `useSubmit`'s `submit` function)!
+    - Action must return sth and we can use `useActionData()` to access whatever it returns! Normally it returns `redirect` to redirect to a specific route or response.
+    - Action function can also have arguments `{ params }` and `{ request }`
+  
+- `useNavigation`
+  - [Documentation](https://reactrouter.com/en/main/hooks/use-navigation)
+  - This Hook tells everything about page navigation: `const navigation = useNavigation();`
+  - `navigation.state`:
+    1. `idle`: No navigation pending
+    2. `loading`: A **route loader** is being called
+    3. `submitting`: A **route action** is being called
 
 - `createBrowserRouter`:
   - [Documentation](https://reactrouter.com/en/main/routers/create-browser-router)
   - Parameters: 
     1. An array of Route objects
-
-    
     2. opts
 
 - Navigate between routes:
   1. `<Link to='...'></Link>`: It is used as HTML `<a href>` tag to navigate to another route!
   2. `<NavLink to='...'></NavLink>`: It is a special kind of `<Link>` that knows whether it is active, pending, or transitioning!
+
+- React Query and React Router
+  - Together: React Query is about **how** to do sth and React Router is about **when** to do sth. We can include `useQuery` in `loader` and `useMutation` in `action`!
+  - Overlap: In React Query, `useQuery` and `useMutation` can return `error` and `isPending`. In React Router, we have `errorElement` and `useNavigation`!
 
 
 ## Usage
@@ -1123,13 +1161,13 @@ const router = createBrowserRouter([{
   element: <App />,
   children: [
     {
-      // Index Route! Don't write `path: '/'` because it can lead to confusion and unexpected behavior!
+      // Index Route (default child route)! Don't write `path: '/'` because it can lead to confusion and unexpected behavior!
       index: true,
-
+      element: ...
     },
     {
-      // This is relative to its parent path: '/about'
-      path: 'about',
+      // This path has dynamic segment! It is relative to its parent route path and can match urls like: '/item/123', '/item/abc'
+      path: 'item/:id',
 
     }
   ]

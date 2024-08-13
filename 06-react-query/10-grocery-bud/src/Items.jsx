@@ -2,6 +2,7 @@ import Item from './Item';
 import { useGetTasks } from './reactQueryCustomHooks';
 
 const Items = () => {
+  // Compared to using 03-advanced-topics/03-conditional-rendering/02-multiple-returns-fetch-data.jsx!!!
   const { data, error, isPending, isError } = useGetTasks();
 
   // console.log(data);
