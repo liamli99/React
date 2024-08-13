@@ -1,4 +1,4 @@
-import { useLoaderData, Link } from "react-router-dom";
+import { Navigate, useLoaderData, useNavigate } from "react-router-dom";
 import axios from 'axios';
 import { useQuery } from "@tanstack/react-query";
 
@@ -33,10 +33,14 @@ const Cocktail = () => {
     .filter((key) => key.startsWith('strIngredient') && drink[key] !== null)
     .map((key) => drink[key]);
   
+  const navigate = useNavigate();
+  
   return (
     <div className='cocktail'>
       <header>
-        <Link className='btn' to='/'>Back Home</Link>
+        {/* Go to previous page */}
+        <button className='btn' onClick={() => navigate(-1)}>Back Home</button>
+        
         <h3>{drink.strDrink}</h3>
       </header>
 
