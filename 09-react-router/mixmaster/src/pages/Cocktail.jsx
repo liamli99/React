@@ -1,17 +1,33 @@
 import { useLoaderData, Link } from "react-router-dom";
 import axios from 'axios';
+import { useQuery } from "@tanstack/react-query";
 
+// We can directly use axios in loader, but in order to cache data, we can also include useQuery!
+const queryOption = (id) => {
+  return {
+    queryKey: ['cocktail', id],
+    queryFn: () => axios.get(`https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${id}`)
+  }
+}
+
+// Note that in main.jsx, the loader function is cocktailLoader(queryClient) which is the returned async function!!!!!
 // This loader function has argument `{ params }` because the route path has dynamic segment!
 // Since the dynamic segment is ':id', we can use params.id to access the exact value!
-export const cocktailLoader = async ({ params }) => {
-  const response = await axios.get(`https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${params.id}`);
-  
-  return { id: params.id, drink: response.data.drinks[0] };
+export const cocktailLoader = (queryClient) => {
+  return async ({ params }) => {
+    const id = params.id;
+
+    await queryClient.ensureQueryData(queryOption(id));
+
+    return id;
+  }
 }
 
 const Cocktail = () => {
-  const { id, drink } = useLoaderData();
-  // console.log(drink);
+  const id = useLoaderData();
+  
+  const { data } = useQuery(queryOption(id));
+  const drink = data.data.drinks[0];
 
   const ingredients = Object.keys(drink)
     .filter((key) => key.startsWith('strIngredient') && drink[key] !== null)

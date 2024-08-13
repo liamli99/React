@@ -485,3 +485,24 @@ nav {
   }
 }
 
+/* Search Form */
+
+.search-container {
+  margin-bottom: 6rem;
+}
+
+.search-container .form {
+  display: grid;
+  grid-template-columns: 1fr auto;
+}
+
+.search-container .form-input {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.search-container .btn {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
