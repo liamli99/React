@@ -1141,9 +1141,10 @@ export const useDeleteTask = () => {
 - Navigate between routes:
   1. `<Link to='...'></Link>`: It is used as HTML `<a href>` tag to navigate to another route!
   2. `<NavLink to='...'></NavLink>`: It is a special kind of `<Link>` that knows whether it is active, pending, or transitioning!
+  3. `const navigate = useNavigate()`: We can use `navigate` function to navigate to another route! Note that `navigate(-1)` means going to the previous page!
 
 - React Query and React Router
-  - Together: React Query is about **how** to do sth and React Router is about **when** to do sth. We can include `useQuery` in `loader` and `useMutation` in `action`!
+  - Together: React Query is about **how** to do sth and React Router is about **when** to do sth. We can include `useQuery` in `loader` and `useMutation` in `action`! If we are really confused, then just don't use `loader` and `action` and use `axios`!
   - Overlap: In React Query, `useQuery` and `useMutation` can return `error` and `isPending`. In React Router, we have `errorElement` and `useNavigation`!
 
 
@@ -1159,16 +1160,18 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 const router = createBrowserRouter([{
   path: '/',
   element: <App />,
+  errorElement: ...,
   children: [
     {
       // Index Route (default child route)! Don't write `path: '/'` because it can lead to confusion and unexpected behavior!
       index: true,
       element: ...
+      errorElement: ...,
+
     },
     {
       // This path has dynamic segment! It is relative to its parent route path and can match urls like: '/item/123', '/item/abc'
       path: 'item/:id',
-
     }
   ]
 }]);
@@ -1178,11 +1181,45 @@ ReactDOM.createRoot(document.getElementById('root')).render(
 )
 ```
 
-```js
-import { Link } from 'react-router-dom';
 
+# CMS (Content Management System)
+- A CMS is a computer software used to manage the creation and modification of digital content! e.g WordPress
+- A headless CMS is a backend only CMS that acts primarily as a content repository. A headless CMS makes content accessible via an API for display on any device, without being limited to a particular frontend! e.g. Contentful
 
-```
+## Contentful
+- Usage:
+  1. Content model -> Create content type -> Add field -> Save
+  2. Content -> Add entry -> Publish (image should be published first)
+  3. Settings -> API keys -> Copy `Space ID` and `Content Delivery API - access token` to .env file
+  4. Content model -> Select specific content type -> Click `Copy ID` and save it to .env file
+  5. [Get All Entries](https://www.contentful.com/developers/docs/references/content-delivery-api/#/reference/entries/entries-collection/get-all-entries-of-a-space/console/js) and [Query Entries](https://www.contentful.com/developers/docs/references/content-delivery-api/#/reference/search-parameters/content-type/query-entries/console/js)
+  
+  6. `npm install contentful`
+  ```js
+  import { createClient } from 'contentful';
+
+  const client = createClient({
+    space: '<space_id>',
+    environment: 'master', // default to 'master' if not set
+    accessToken: '<content_delivery_api_key>'
+  });
+
+  const response = await client.getEntries({ content_type: '<content_type_id>' });
+  // An array of entry objects
+  const entries = response.items.map((item) => {
+    // Used as array item's key
+    const id = item.sys.id;
+    
+    // If a field is text, we can extract it from item.fields.text
+    // If a field is image, we can extract its url from item.fields.image.fields.file.url
+    const { image, text } = item.fields;
+    const img = image?.fields?.file?.url;
+
+    // A single entry
+    return { id, text, img };
+  })
+  ```
+
 
 # Figma
 
