@@ -15,6 +15,8 @@ const ProjectsReactQuery = () => {
     queryFn: () => client.getEntries({ content_type: import.meta.env.VITE_CONTENT_TYPE })
   });
 
+  // Note that we cannot directly use 'data' here!!! Because 'data' is actually a state variable whose value changes!!! The initial value of 'data' is undefined, then it will get a value!!!
+
   if (isPending) {
     return (
       <section className='projects'>
