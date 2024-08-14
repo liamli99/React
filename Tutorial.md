@@ -33,6 +33,7 @@
   **OR**
   - Sites -> Add new site -> Import an existing project -> GitHub -> choose a repo -> Build command: `npm run build`, Publish directory: `build` (Create React App) or `dist` (Vite) -> Add Environment Variables if any
   - Benefit: every time we push changes to GitHub, Netlify will automatically rebuild our project!
+3. If we use `React Router`, remember to include `/* /index.html 200` as the content of `_redirects` file which should exist in the `public` folder!
 
 
 ## Environment Variables
@@ -1146,6 +1147,9 @@ export const useDeleteTask = () => {
 - React Query and React Router
   - Together: React Query is about **how** to do sth and React Router is about **when** to do sth. We can include `useQuery` in `loader` and `useMutation` in `action`! If we are really confused, then just don't use `loader` and `action` and use `axios`!
   - Overlap: In React Query, `useQuery` and `useMutation` can return `error` and `isPending`. In React Router, we have `errorElement` and `useNavigation`!
+
+- Netlify
+  If we use Netlify to deploy the React project using React Router, remember to include `/* /index.html 200` as the content of `_redirects` file which should exist in the `public` folder!
 
 
 ## Usage

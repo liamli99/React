@@ -2,7 +2,7 @@ import { createClient } from 'contentful';
 import { useState, useEffect } from 'react';
 
 const Projects = () => {
-  // We can also use React Query to rewrite these codes!
+  // We can also use React Query to rewrite these codes!!!
   const [projects, setProjects] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);

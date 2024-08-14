@@ -6,6 +6,7 @@ const Items = () => {
   const { data, error, isPending, isError } = useGetTasks();
 
   // console.log(data);
+  // Note that we cannot directly use 'data' here!!!
 
   if (isPending) {
     return <p style={{ marginTop: '1rem' }}>Loading...</p>
