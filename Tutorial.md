@@ -1223,10 +1223,13 @@ ReactDOM.createRoot(document.getElementById('root')).render(
   })
   ```
 
-  # Redux Toolkit
-  - [Documentation](https://redux-toolkit.js.org/introduction/getting-started)
-  - `npm install @reduxjs/toolkit react-redux`
+# Redux Toolkit
+- [Documentation](https://redux-toolkit.js.org/introduction/getting-started)
+- `npm install @reduxjs/toolkit react-redux`
 
+
+# Tailwind CSS
+- [Documentation]()
 
 
 
