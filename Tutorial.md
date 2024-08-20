@@ -694,7 +694,7 @@ const AppContext = createContext(defaultValue);
 export const useAppContext = () => useContext(AppContext);
 
 // We will wrap App component inside AppProvider component tags in main.jsx! So that all the components will have access to the value!
-export const AppProvider = ({ children }) => {
+export const AppContextProvider = ({ children }) => {
   return (
     <AppContext.Provider value={...}>
       {children}
@@ -1098,7 +1098,7 @@ export const useDeleteTask = () => {
 - Route is an object:
   - `path`:
     - When the route path matches the current url, the route element will be rendered. 
-    - It can include dynamic segments that start with `:`! e.g. '/user/:userId' can match urls like '/user/123' or '/user/abc'! The loader function will have an argument `{ params }` where `params` is an object whose property is the dynamic segment after `:`! e.g. If path is '/user/:userId', then we can use 'params.userId' to access the exact value!
+    - It can include dynamic segments that start with `:`! e.g. '/user/:userId' can match urls like '/user/123' or '/user/abc'! The loader/action function will have an argument `{ params }` to access the dynamic segment, also, we can use `useParams()` in route element to access the dynamic segment! e.g. If path is '/user/:userId', then we can use 'params.userId' in loader/action and 'const { userId } = useParams()' in route element to access the exact value! 
     - Child route path should not start with `/` and is relative to its parent!!!
   
   - `element`: the React Component to render
@@ -1165,13 +1165,12 @@ const router = createBrowserRouter([{
   path: '/',
   element: <App />,
   errorElement: ...,
+  loader: ...,
+  action: ...,
   children: [
     {
       // Index Route (default child route)! Don't write `path: '/'` because it can lead to confusion and unexpected behavior!
-      index: true,
-      element: ...
-      errorElement: ...,
-
+      index: true
     },
     {
       // This path has dynamic segment! It is relative to its parent route path and can match urls like: '/item/123', '/item/abc'
@@ -1224,7 +1223,10 @@ ReactDOM.createRoot(document.getElementById('root')).render(
   })
   ```
 
+  # Redux Toolkit
+  - [Documentation](https://redux-toolkit.js.org/introduction/getting-started)
+  - `npm install @reduxjs/toolkit react-redux`
 
-# Figma
+
 
 

@@ -1,5 +1,6 @@
 import { Form } from "react-router-dom";
 
+// Please try to follow 07-unsplash-images and use normal <form> tag and useState Hook to solve this problem!
 const SearchForm = ({ searchTerm }) => {
   return (
     <div className='search-container'>
