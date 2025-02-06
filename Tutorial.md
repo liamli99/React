@@ -43,7 +43,7 @@
 
 
 ## Theories
-### UI as a Tree
+### React models UI as a Tree
 1. **Render trees** represent the nested relationship between React components across a single render.
 2. **Dependency trees** represent the module dependencies in a React app.
 
@@ -641,7 +641,7 @@ function App() {
 
 ### `useContext`
 - [Documentation](https://react.dev/learn/passing-data-deeply-with-context)
-- Usually, we pass information from parent component to child component via props. However, if we have to pass the information through many components in the middle, or if many components need the same information, we can use ***context***! Context lets the parent component make some information available to any component in the tree below it!
+- Usually, we pass information from parent component to child component via props. However, if we have to pass the information to a deeply nested child component through many components in the middle (**prop drilling**), we can use ***context***! Context lets the parent component make some information available to any component in the tree below it!
 
 #### Usage
 1. **Create** a context
